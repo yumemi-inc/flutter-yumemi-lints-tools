@@ -1,4 +1,4 @@
-name: yumemi_lints_workspace
+name: yumemi_lints_tools_workspace
 
 environment:
   sdk: ^3.1.0
