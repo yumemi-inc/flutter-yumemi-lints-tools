@@ -2,7 +2,7 @@
 
 In general, we welcome contributions in the following areas 🙌:
 
-- Improvements to `tools/update_lint_rules`
+- Improvements to the `tools` directory
 - Other minor enhancements
 
 If your contribution doesn't fall into these categories, please feel free to discuss it in the [Discussions] section.
@@ -21,7 +21,7 @@ If there is no relevant Issue, you can create a new one using the [Issue Form].
 
 To avoid overlapping work with others, comment on the Issue with 🙋 and start working on it.
 
-Create a branch from the latest state of the `main` or `release/{version}` branch. For more information on our [branch strategy].
+Create a branch from the latest state of the `main` branch. For more information on our [branch strategy].
 
 ### 3. Submit a Pull Request
 
@@ -35,9 +35,9 @@ And thank you ✨
 
 <!-- Links -->
 
-[Discussions]: https://github.com/yumemi-inc/flutter-yumemi-lints/discussions
+[Discussions]: https://github.com/yumemi-inc/flutter-yumemi-lints-tools/discussions
 
-[Issue Form]: https://github.com/yumemi-inc/flutter-yumemi-lints/issues/new/choose
+[Issue Form]: https://github.com/yumemi-inc/flutter-yumemi-lints-tools/issues/new/choose
 
 [branch strategy]: ../BRANCH.md
 
