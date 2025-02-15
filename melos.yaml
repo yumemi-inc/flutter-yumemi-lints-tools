@@ -2,7 +2,7 @@ name: yumemi_lints_tools
 sdkPath: .dvm/dart_sdk
 
 packages:
-  - packages/**
+  - tools/**
 
 command:
   bootstrap:
