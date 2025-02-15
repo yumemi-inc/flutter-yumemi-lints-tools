@@ -9,13 +9,4 @@
   },
   "github.copilot.editor.enableCodeActions": true,
   "github.copilot.editor.enableAutoCompletions": true,
-  "cSpell.words": [
-    "yumemi",
-    "riverpod",
-    "pubspec",
-    "intellij",
-    "todos",
-    "googleapis",
-    "Memoizer",
-  ],
 }

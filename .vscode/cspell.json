@@ -1,0 +1,13 @@
+{
+    "words": [
+        "blendfactory",
+        "Memoizer",
+        "nonobvious",
+        "riverpod",
+        "yumemi"
+    ],
+    "ignorePaths": [
+        "README.md",
+        "**/*.lock"
+    ]
+}
