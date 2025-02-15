@@ -2,77 +2,34 @@
 
 ## Overview
 
-Provides a set of lint rules recommended by YUMEMI Inc. for Dart and Flutter projects. These rules help enhance code quality and maintainability by ensuring adherence to best practices and style conventions. Follow the steps below to integrate and customize these lint rules into your project.
+This project provides tools for managing the [`yumemi_lints`] package:
+- Detecting differences in Dart/Flutter lint rules between versions
+- Automating lint rule updates
 
-## Usage
+Originally, this project was part of the [`yumemi_lints`] repository. However, it was moved to a separate repository to simplify management. While [`yumemi_lints`] supports a wide range of Dart SDK versions (2.17 and above), this project only needs to support a single Dart SDK version. This separation helps reduce complexity in development environment setup and CI configuration.
 
-### 1. Installation
+## Tools
 
-In a terminal, located at the root of your package, run this command:
+This project provides tools:
+
+- **check_lint_rules_identity**
+- **update_lint_rules**
+
+### check_lint_rules_identity
+
+A tool to detect differences in lint rules between different versions of the [`yumemi_lints`] package. It helps identify any changes or inconsistencies in the lint rules across versions.
 
 ```shell
-dart pub add dev:yumemi_lints
+dart run check_lint_rules_identity <version_paths_file> <lint_rules_dir>
 ```
 
-### 2. Setting
+### update_lint_rules
 
-In a terminal, located at the root of your package, run this command:
+A tool to automatically update lint rules in the [`yumemi_lints`] package. It ensures that the lint rules are kept up-to-date with the latest recommendations and best practices.
 
 ```shell
-dart run yumemi_lints update
+dart run update_lint_rules <lint_rules_dir>
 ```
-
-The above command will automatically update the lint rules to the recommended.yaml recommended by Yumemi Inc. according to the version of Flutter or Dart SDK used in the project.
-
-This can be used when introducing yumemi_lints or when updating the Flutter or Dart sdk version to avoid the hassle of manually updating lints.
-
-### 3. Configuration
-
-#### Basic
-
-For basic lint rule configuration, include lint rules recommended by YUMEMI Inc. in your `analysis_options.yaml` file as shown below:
-
-```yaml:analysis_options.yaml
-include: package:yumemi_lints/dart/2.17/recommended.yaml
-```
-
-Please note that you need to adjust the file path accordingly based on the Dart or Flutter version your project is using.
-
-#### Customization
-
-If you want to customize lint rules, include all lint rules in your `analysis_options.yaml` file as shown below:
-
-```yaml:analysis_options.yaml
-include: package:yumemi_lints/dart/2.17/all.yaml
-
-analyzer:
-  errors:
-    # By including all.yaml, some rules will conflict.
-    # These warnings will be addressed within this file.
-    included_file_warning: ignore
-
-linter:
-  rules:
-    # Conflicts with enabling `avoid_types_on_closure_parameters`, `omit_local_variable_types`.
-    always_specify_types: false
-
-    # Conflicts with enabling `strict-raw-types`.
-    avoid_annotating_with_dynamic: false
-
-    # Conflicts with enabling `prefer_single_quotes`.
-    prefer_double_quotes: false
-
-    # Conflicts with enabling `avoid_final_parameters`.
-    prefer_final_parameters: false
-
-    # Conflicts with enabling `always_use_package_imports`.
-    prefer_relative_imports: false
-
-    # Conflicts with enabling `prefer_final_locals`.
-    unnecessary_final: false
-```
-
-In the above example, we have customized various lint rules by adjusting their settings in the `analysis_options.yaml` file. You can modify these settings according to your project's specific needs and coding style preferences.
 
 ## How to contribute
 
@@ -137,5 +94,7 @@ See [Contributor Guide] for contributing conventions.
 </table>
 
 <!-- Links -->
+
+[yumemi_lints]: https://pub.dev/packages/yumemi_lints
 
 [Contributor Guide]: https://github.com/yumemi-inc/flutter-yumemi-lints-tools/blob/main/docs/contributing/CONTRIBUTING.md
