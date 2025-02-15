@@ -5,6 +5,3 @@
 # IntelliJ related
 /.idea/*
 !/.idea/runConfigurations/
-
-# Melos related
-/pubspec_overrides.yaml
