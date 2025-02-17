@@ -9,4 +9,7 @@
   },
   "github.copilot.editor.enableCodeActions": true,
   "github.copilot.editor.enableAutoCompletions": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-issue-config.json": ".github/ISSUE_TEMPLATE/config.yaml"
+  },
 }
