@@ -94,5 +94,5 @@ See [Contributor Guide] for contributing conventions.
 </table>
 
 <!-- Links -->
-[yumemi_lints]: https://pub.dev/packages/yumemi_lints
+[`yumemi_lints`]: https://pub.dev/packages/yumemi_lints
 [Contributor Guide]: https://github.com/yumemi-inc/flutter-yumemi-lints-tools/blob/main/docs/contributing/CONTRIBUTING.md
