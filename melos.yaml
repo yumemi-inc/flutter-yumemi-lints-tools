@@ -33,6 +33,7 @@ command:
 
 scripts:
   gen:build:
+    description: Generate code using build_runner.
     run: dart run build_runner build -d
     exec:
       orderDependents: true
