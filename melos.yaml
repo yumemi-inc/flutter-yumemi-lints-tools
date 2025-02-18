@@ -40,6 +40,19 @@ scripts:
     packageFilters:
       dependsOn: build_runner
 
+  upgrade:
+    description: Upgrade pub package dependencies.
+    run: dart pub upgrade
+    exec:
+      concurrency: 1
+      orderDependents: true
+  upgrade:major:
+    description: Upgrade pub package dependencies to latest major versions.
+    run: dart pub upgrade --major-versions
+    exec:
+      concurrency: 1
+      orderDependents: true
+
 ide:
   intellij:
     # Disabling IntelliJ's automatic configuration.
