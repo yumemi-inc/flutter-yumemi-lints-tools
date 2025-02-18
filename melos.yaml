@@ -53,6 +53,24 @@ scripts:
       concurrency: 1
       orderDependents: true
 
+  test:
+    description: Run tests for Dart packages.
+    run: dart test
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: test
+      dirExists: test
+
+  report:test:
+    description: Generate test report for Dart packages.
+    run: dart test --file-reporter="json:test_report.log"
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: test
+      dirExists: test
+
 ide:
   intellij:
     # Disabling IntelliJ's automatic configuration.
