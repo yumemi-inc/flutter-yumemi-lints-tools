@@ -1,0 +1,62 @@
+name: Check Pull Request
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+concurrency:
+  group: check-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up the project
+        uses: ./.github/actions/setup
+
+      - name: Report analyze
+        uses: invertase/github-action-dart-analyzer@e981b01a458d0bab71ee5da182e5b26687b7101b # v3.0.0
+        with:
+          fatal-infos: true
+
+      - name: Check format
+        run: melos format --output none --set-exit-if-changed
+
+      - name: Check for circular dependencies
+        run: melos list --cycles
+
+      - name: Check for generated files diff
+        run: |
+          melos run gen:build --no-select
+          git add -N .
+          git diff --name-only --exit-code
+
+      - name: Run test
+        run: melos run report:test --no-select
+        continue-on-error: true
+
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3.0.0
+        with:
+          # https://github.com/isaacs/node-glob の形式
+          files: "**/test_report.log"
+
+      - name: Report test
+        if: steps.check_files.outputs.files_exists == 'true'
+        uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5 # v1.9.1
+        with:
+          name: "dart test"
+          # https://github.com/mrmlnc/fast-glob の形式
+          path: "(tools|packages)/**/test_report.log"
+          reporter: "dart-json"
+          fail-on-error: "true"
