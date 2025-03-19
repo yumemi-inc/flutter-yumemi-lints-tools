@@ -1,10 +1,10 @@
-import 'dart:convert';
-
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+// ignore: depend_on_referenced_packages
+import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 import 'package:update_lint_rules/src/models/not_recommended_rule.dart';
@@ -122,25 +122,49 @@ class LintRuleService {
         () async {
           final url = Uri.https(
             'raw.githubusercontent.com',
-            'dart-lang/sdk/main/pkg/linter/tool/machine/rules.json',
+            'dart-lang/sdk/main/pkg/linter/messages.yaml',
           );
 
           final responseBody = await _appClient.read(url);
 
-          final json = jsonDecode(responseBody) as List<dynamic>;
+          final yaml = loadYaml(responseBody);
+          final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
-          final rules = json.map((e) => Rule.fromJson(e)).where(
-                (e) => switch (e.state) {
-                  RuleState.stable || RuleState.experimental => true,
-                  RuleState.deprecated || RuleState.removed => false,
-                },
-              );
+          // TODO: sharedNameが共通のプロパティは統合し、nameはsharedNameの値にするようにする。
+          final List<Map<String, dynamic>> json = lintCode.entries.map((e) {
+            return {
+              'name': e.key,
+              ...convertToJsonFromYaml(e.value),
+            };
+          }).toList();
+
+          final rules = json.map((e) => Rule.fromJson(e)).where((r) =>
+              r.state?.keys.where((state) => state.active).isNotEmpty ?? false);
+
           return rules;
         },
       );
 
+  Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
+    dynamic jsonValue(dynamic value) {
+      return switch (value) {
+        YamlMap() =>
+          value.map((key, value) => MapEntry(key.toString(), jsonValue(value))),
+        YamlList() => value.map(jsonValue).toList(),
+        _ => value
+      };
+    }
+
+    return yamlMap.map(
+      (key, value) => MapEntry(key.toString(), jsonValue(value)),
+    );
+  }
+
   Future<bool> isFlutterOnlyRule(Rule rule) async {
-    if (_isNotFlutterOnlyRules.contains(rule.name)) {
+    final containsFlutterOnlyRules =
+        _isNotFlutterOnlyRules.where((e) => e.contains(rule.name)).isNotEmpty;
+
+    if (containsFlutterOnlyRules) {
       return false;
     }
 
