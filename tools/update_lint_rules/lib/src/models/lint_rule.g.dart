@@ -8,6 +8,7 @@ part of 'lint_rule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+<<<<<<< HEAD
 _Rule _$RuleFromJson(Map<String, dynamic> json) => $checkedCreate(
   '_Rule',
   json,
@@ -43,12 +44,33 @@ _Rule _$RuleFromJson(Map<String, dynamic> json) => $checkedCreate(
         'sinceDartSdk',
         (v) => Since.fromJson(v as String),
       ),
+=======
+_$_Rule _$$_RuleFromJson(Map<String, dynamic> json) => $checkedCreate(
+      r'_$_Rule',
+      json,
+      ($checkedConvert) {
+        final val = _$_Rule(
+          name: $checkedConvert('name', (v) => v as String),
+          categories: $checkedConvert('categories',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
+          details: $checkedConvert('deprecatedDetails', (v) => v as String?),
+          state: $checkedConvert(
+              'state',
+              (v) => _$JsonConverterFromJson<Map<String, dynamic>,
+                      Map<RuleState, Since>>(
+                  v, const _StateJsonConverter().fromJson)),
+        );
+        return val;
+      },
+      fieldKeyMap: const {'details': 'deprecatedDetails'},
+>>>>>>> e55ad0c (feat: Change Rule property for yaml)
     );
     return val;
   },
   fieldKeyMap: const {'incompatibles': 'incompatible', 'since': 'sinceDartSdk'},
 );
 
+<<<<<<< HEAD
 Map<String, dynamic> _$RuleToJson(_Rule instance) => <String, dynamic>{
   'name': instance.name,
   'description': instance.description,
@@ -60,24 +82,25 @@ Map<String, dynamic> _$RuleToJson(_Rule instance) => <String, dynamic>{
   'details': instance.details,
   'sinceDartSdk': instance.since.toJson(),
 };
+=======
+Map<String, dynamic> _$$_RuleToJson(_$_Rule instance) => <String, dynamic>{
+      'name': instance.name,
+      'categories': instance.categories,
+      'deprecatedDetails': instance.details,
+      'state':
+          _$JsonConverterToJson<Map<String, dynamic>, Map<RuleState, Since>>(
+              instance.state, const _StateJsonConverter().toJson),
+    };
+>>>>>>> e55ad0c (feat: Change Rule property for yaml)
 
-const _$RuleStateEnumMap = {
-  RuleState.stable: 'stable',
-  RuleState.experimental: 'experimental',
-  RuleState.deprecated: 'deprecated',
-  RuleState.removed: 'removed',
-};
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
 
-const _$RuleSetEnumMap = {
-  RuleSet.core: 'core',
-  RuleSet.recommended: 'recommended',
-  RuleSet.flutter: 'flutter',
-};
-
-const _$FixStatusEnumMap = {
-  FixStatus.unregistered: 'unregistered',
-  FixStatus.needsFix: 'needsFix',
-  FixStatus.needsEvaluation: 'needsEvaluation',
-  FixStatus.hasFix: 'hasFix',
-  FixStatus.noFix: 'noFix',
-};
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

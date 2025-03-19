@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 part 'lint_rule.freezed.dart';
-
 part 'lint_rule.g.dart';
 
 typedef LintRules =
@@ -19,14 +18,9 @@ sealed class LintRule with _$LintRule {
 abstract class Rule with _$Rule {
   const factory Rule({
     required String name,
-    required String description,
-    required List<String> categories,
-    required RuleState state,
-    @JsonKey(name: 'incompatible') required List<String> incompatibles,
-    required List<RuleSet> sets,
-    required FixStatus fixStatus,
-    required String details,
-    @JsonKey(name: 'sinceDartSdk') required Since since,
+    required List<String>? categories,
+    @JsonKey(name: 'deprecatedDetails') required String? details,
+    @_StateJsonConverter() required State? state,
   }) = _Rule;
 
   factory Rule.fromJson(Map<String, dynamic> json) => _$RuleFromJson(json);
@@ -34,7 +28,20 @@ abstract class Rule with _$Rule {
   const Rule._();
 }
 
-enum RuleState { stable, experimental, deprecated, removed }
+enum RuleState {
+  stable,
+  experimental,
+  deprecated,
+  removed,
+  internal;
+
+  bool get active => switch (this) {
+    RuleState.stable || RuleState.experimental => true,
+    RuleState.deprecated || RuleState.removed || RuleState.internal => false,
+  };
+
+  bool get inactive => !active;
+}
 
 enum RuleSet { core, recommended, flutter }
 
@@ -73,4 +80,22 @@ sealed class Since with _$Since {
     SinceDartSdk(version: final version) => '${version.major}.${version.minor}',
     SinceUnreleased() => 'unreleased',
   };
+}
+
+typedef State = Map<RuleState, Since>;
+
+class _StateJsonConverter
+    implements JsonConverter<State, Map<String, dynamic>> {
+  const _StateJsonConverter();
+
+  @override
+  State fromJson(Map<String, dynamic> value) {
+    return value.map(
+      (key, value) =>
+          MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson(State value) => Map<String, dynamic>.from(value);
 }
