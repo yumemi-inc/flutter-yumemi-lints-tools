@@ -390,16 +390,11 @@ Rule _$RuleFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Rule {
   String get name => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-  List<String> get categories => throw _privateConstructorUsedError;
-  RuleState get state => throw _privateConstructorUsedError;
-  @JsonKey(name: 'incompatible')
-  List<String> get incompatibles => throw _privateConstructorUsedError;
-  List<RuleSet> get sets => throw _privateConstructorUsedError;
-  FixStatus get fixStatus => throw _privateConstructorUsedError;
-  String get details => throw _privateConstructorUsedError;
-  @JsonKey(name: 'sinceDartSdk')
-  Since get since => throw _privateConstructorUsedError;
+  List<String>? get categories => throw _privateConstructorUsedError;
+  @JsonKey(name: 'deprecatedDetails')
+  String? get details => throw _privateConstructorUsedError;
+  @_StateJsonConverter()
+  Map<RuleState, Since>? get state => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -413,16 +408,9 @@ abstract class $RuleCopyWith<$Res> {
   @useResult
   $Res call(
       {String name,
-      String description,
-      List<String> categories,
-      RuleState state,
-      @JsonKey(name: 'incompatible') List<String> incompatibles,
-      List<RuleSet> sets,
-      FixStatus fixStatus,
-      String details,
-      @JsonKey(name: 'sinceDartSdk') Since since});
-
-  $SinceCopyWith<$Res> get since;
+      List<String>? categories,
+      @JsonKey(name: 'deprecatedDetails') String? details,
+      @_StateJsonConverter() Map<RuleState, Since>? state});
 }
 
 /// @nodoc
@@ -439,61 +427,28 @@ class _$RuleCopyWithImpl<$Res, $Val extends Rule>
   @override
   $Res call({
     Object? name = null,
-    Object? description = null,
-    Object? categories = null,
-    Object? state = null,
-    Object? incompatibles = null,
-    Object? sets = null,
-    Object? fixStatus = null,
-    Object? details = null,
-    Object? since = null,
+    Object? categories = freezed,
+    Object? details = freezed,
+    Object? state = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      categories: null == categories
+      categories: freezed == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      state: null == state
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as RuleState,
-      incompatibles: null == incompatibles
-          ? _value.incompatibles
-          : incompatibles // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      sets: null == sets
-          ? _value.sets
-          : sets // ignore: cast_nullable_to_non_nullable
-              as List<RuleSet>,
-      fixStatus: null == fixStatus
-          ? _value.fixStatus
-          : fixStatus // ignore: cast_nullable_to_non_nullable
-              as FixStatus,
-      details: null == details
+              as List<String>?,
+      details: freezed == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
-              as String,
-      since: null == since
-          ? _value.since
-          : since // ignore: cast_nullable_to_non_nullable
-              as Since,
+              as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as Map<RuleState, Since>?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SinceCopyWith<$Res> get since {
-    return $SinceCopyWith<$Res>(_value.since, (value) {
-      return _then(_value.copyWith(since: value) as $Val);
-    });
   }
 }
 
@@ -505,17 +460,9 @@ abstract class _$$_RuleCopyWith<$Res> implements $RuleCopyWith<$Res> {
   @useResult
   $Res call(
       {String name,
-      String description,
-      List<String> categories,
-      RuleState state,
-      @JsonKey(name: 'incompatible') List<String> incompatibles,
-      List<RuleSet> sets,
-      FixStatus fixStatus,
-      String details,
-      @JsonKey(name: 'sinceDartSdk') Since since});
-
-  @override
-  $SinceCopyWith<$Res> get since;
+      List<String>? categories,
+      @JsonKey(name: 'deprecatedDetails') String? details,
+      @_StateJsonConverter() Map<RuleState, Since>? state});
 }
 
 /// @nodoc
@@ -528,52 +475,27 @@ class __$$_RuleCopyWithImpl<$Res> extends _$RuleCopyWithImpl<$Res, _$_Rule>
   @override
   $Res call({
     Object? name = null,
-    Object? description = null,
-    Object? categories = null,
-    Object? state = null,
-    Object? incompatibles = null,
-    Object? sets = null,
-    Object? fixStatus = null,
-    Object? details = null,
-    Object? since = null,
+    Object? categories = freezed,
+    Object? details = freezed,
+    Object? state = freezed,
   }) {
     return _then(_$_Rule(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      categories: null == categories
+      categories: freezed == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      state: null == state
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as RuleState,
-      incompatibles: null == incompatibles
-          ? _value._incompatibles
-          : incompatibles // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      sets: null == sets
-          ? _value._sets
-          : sets // ignore: cast_nullable_to_non_nullable
-              as List<RuleSet>,
-      fixStatus: null == fixStatus
-          ? _value.fixStatus
-          : fixStatus // ignore: cast_nullable_to_non_nullable
-              as FixStatus,
-      details: null == details
+              as List<String>?,
+      details: freezed == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
-              as String,
-      since: null == since
-          ? _value.since
-          : since // ignore: cast_nullable_to_non_nullable
-              as Since,
+              as String?,
+      state: freezed == state
+          ? _value._state
+          : state // ignore: cast_nullable_to_non_nullable
+              as Map<RuleState, Since>?,
     ));
   }
 }
@@ -583,63 +505,44 @@ class __$$_RuleCopyWithImpl<$Res> extends _$RuleCopyWithImpl<$Res, _$_Rule>
 class _$_Rule extends _Rule {
   const _$_Rule(
       {required this.name,
-      required this.description,
-      required final List<String> categories,
-      required this.state,
-      @JsonKey(name: 'incompatible') required final List<String> incompatibles,
-      required final List<RuleSet> sets,
-      required this.fixStatus,
-      required this.details,
-      @JsonKey(name: 'sinceDartSdk') required this.since})
+      required final List<String>? categories,
+      @JsonKey(name: 'deprecatedDetails') required this.details,
+      @_StateJsonConverter() required final Map<RuleState, Since>? state})
       : _categories = categories,
-        _incompatibles = incompatibles,
-        _sets = sets,
+        _state = state,
         super._();
 
   factory _$_Rule.fromJson(Map<String, dynamic> json) => _$$_RuleFromJson(json);
 
   @override
   final String name;
+  final List<String>? _categories;
   @override
-  final String description;
-  final List<String> _categories;
-  @override
-  List<String> get categories {
+  List<String>? get categories {
+    final value = _categories;
+    if (value == null) return null;
     if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_categories);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
-  final RuleState state;
-  final List<String> _incompatibles;
+  @JsonKey(name: 'deprecatedDetails')
+  final String? details;
+  final Map<RuleState, Since>? _state;
   @override
-  @JsonKey(name: 'incompatible')
-  List<String> get incompatibles {
-    if (_incompatibles is EqualUnmodifiableListView) return _incompatibles;
+  @_StateJsonConverter()
+  Map<RuleState, Since>? get state {
+    final value = _state;
+    if (value == null) return null;
+    if (_state is EqualUnmodifiableMapView) return _state;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_incompatibles);
+    return EqualUnmodifiableMapView(value);
   }
-
-  final List<RuleSet> _sets;
-  @override
-  List<RuleSet> get sets {
-    if (_sets is EqualUnmodifiableListView) return _sets;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sets);
-  }
-
-  @override
-  final FixStatus fixStatus;
-  @override
-  final String details;
-  @override
-  @JsonKey(name: 'sinceDartSdk')
-  final Since since;
 
   @override
   String toString() {
-    return 'Rule(name: $name, description: $description, categories: $categories, state: $state, incompatibles: $incompatibles, sets: $sets, fixStatus: $fixStatus, details: $details, since: $since)';
+    return 'Rule(name: $name, categories: $categories, details: $details, state: $state)';
   }
 
   @override
@@ -648,18 +551,10 @@ class _$_Rule extends _Rule {
         (other.runtimeType == runtimeType &&
             other is _$_Rule &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
-            (identical(other.state, state) || other.state == state) &&
-            const DeepCollectionEquality()
-                .equals(other._incompatibles, _incompatibles) &&
-            const DeepCollectionEquality().equals(other._sets, _sets) &&
-            (identical(other.fixStatus, fixStatus) ||
-                other.fixStatus == fixStatus) &&
             (identical(other.details, details) || other.details == details) &&
-            (identical(other.since, since) || other.since == since));
+            const DeepCollectionEquality().equals(other._state, _state));
   }
 
   @JsonKey(ignore: true)
@@ -667,14 +562,9 @@ class _$_Rule extends _Rule {
   int get hashCode => Object.hash(
       runtimeType,
       name,
-      description,
       const DeepCollectionEquality().hash(_categories),
-      state,
-      const DeepCollectionEquality().hash(_incompatibles),
-      const DeepCollectionEquality().hash(_sets),
-      fixStatus,
       details,
-      since);
+      const DeepCollectionEquality().hash(_state));
 
   @JsonKey(ignore: true)
   @override
@@ -692,15 +582,11 @@ class _$_Rule extends _Rule {
 
 abstract class _Rule extends Rule {
   const factory _Rule(
-      {required final String name,
-      required final String description,
-      required final List<String> categories,
-      required final RuleState state,
-      @JsonKey(name: 'incompatible') required final List<String> incompatibles,
-      required final List<RuleSet> sets,
-      required final FixStatus fixStatus,
-      required final String details,
-      @JsonKey(name: 'sinceDartSdk') required final Since since}) = _$_Rule;
+          {required final String name,
+          required final List<String>? categories,
+          @JsonKey(name: 'deprecatedDetails') required final String? details,
+          @_StateJsonConverter() required final Map<RuleState, Since>? state}) =
+      _$_Rule;
   const _Rule._() : super._();
 
   factory _Rule.fromJson(Map<String, dynamic> json) = _$_Rule.fromJson;
@@ -708,23 +594,13 @@ abstract class _Rule extends Rule {
   @override
   String get name;
   @override
-  String get description;
+  List<String>? get categories;
   @override
-  List<String> get categories;
+  @JsonKey(name: 'deprecatedDetails')
+  String? get details;
   @override
-  RuleState get state;
-  @override
-  @JsonKey(name: 'incompatible')
-  List<String> get incompatibles;
-  @override
-  List<RuleSet> get sets;
-  @override
-  FixStatus get fixStatus;
-  @override
-  String get details;
-  @override
-  @JsonKey(name: 'sinceDartSdk')
-  Since get since;
+  @_StateJsonConverter()
+  Map<RuleState, Since>? get state;
   @override
   @JsonKey(ignore: true)
   _$$_RuleCopyWith<_$_Rule> get copyWith => throw _privateConstructorUsedError;
