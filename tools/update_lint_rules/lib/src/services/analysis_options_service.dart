@@ -2,6 +2,7 @@ import 'package:file/file.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:update_lint_rules/src/extension/version_ext.dart';
 import 'package:update_lint_rules/src/models/dart_sdk_release.dart';
 import 'package:update_lint_rules/src/models/flutter_sdk_release.dart';
@@ -11,6 +12,23 @@ import 'package:update_lint_rules/src/models/recommended_rule_severity.dart';
 import 'package:update_lint_rules/src/output_dir.dart';
 
 part 'analysis_options_service.g.dart';
+
+extension ExtState on State {
+  bool hasMinimumVersion(Version version) {
+    return entries.where((e) {
+      if (e.key.inactive) {
+        return false;
+      }
+
+      final since = e.value;
+      if (since is! SinceDartSdk) {
+        return false;
+      }
+
+      return since.version <= version;
+    }).isNotEmpty;
+  }
+}
 
 @Riverpod(dependencies: [outputDir])
 AnalysisOptionsService analysisOptionsService(Ref ref) {
@@ -32,28 +50,16 @@ class AnalysisOptionsService {
   }) async {
     final futures = releases.map((release) async {
       final dartSdkVersion = release.version;
-      final allLintRules = lintRules.where((lintRule) {
-        final since = lintRule.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
-      final filteredNotRecommendedRules = notRecommendedRules.where((r) {
-        final since = r.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
+      final allLintRules = lintRules.where(
+        (lintRule) =>
+            lintRule.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+      );
+
+      final filteredNotRecommendedRules = notRecommendedRules.where(
+        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+      );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) {
-          final since = r.rule.since;
-          if (since is! SinceDartSdk) {
-            return false;
-          }
-          return since.version <= dartSdkVersion;
-        },
+        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
       );
 
       final dartOutputDir = _outputDir.childDirectory(
@@ -88,28 +94,15 @@ class AnalysisOptionsService {
     final futures = releases.map((release) async {
       final flutterSdkVersion = release.version;
       final dartSdkVersion = release.dartSdkVersion;
-      final allLintRules = lintRules.where((lintRule) {
-        final since = lintRule.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
-      final filteredNotRecommendedRules = notRecommendedRules.where((r) {
-        final since = r.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
+      final allLintRules = lintRules.where(
+        (lintRule) =>
+            lintRule.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+      );
+      final filteredNotRecommendedRules = notRecommendedRules.where(
+        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+      );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) {
-          final since = r.rule.since;
-          if (since is! SinceDartSdk) {
-            return false;
-          }
-          return since.version <= dartSdkVersion;
-        },
+        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
       );
 
       final flutterOutputDir = _outputDir.childDirectory(
@@ -163,12 +156,24 @@ linter:
     String ruleText(Rule rule) {
       const indent = '    ';
       final buffer = StringBuffer('$indent- ${rule.name}');
-      if (rule.incompatibles case final incompatibles
-          when incompatibles.isNotEmpty) {
-        buffer.write(' # incompatibles: ${incompatibles.join(',')}');
-      }
-      if (rule.categories case final categories when categories.isNotEmpty) {
-        buffer.write(' # categories: ${categories.join(',')}');
+
+      ///  TODO:
+      ///
+      /// SHA-1: 6322a400f1b0e70cba725d857d0936b5d5e2ea99
+      ///
+      /// Comment out the property that corresponds to INCOMPATIBLE
+      /// because it does not exist in the above SHA-1.
+      ///
+      /// Deletion or not will be determined at a later date.
+
+      // if (rule.incompatibles case final incompatibles
+      //     when incompatibles.isNotEmpty) {
+      //   buffer.write(' # incompatibles: ${incompatibles.join(',')}');
+      // }
+
+      if (rule.categories case final categories
+          when categories?.isNotEmpty ?? false) {
+        buffer.write(' # categories: ${categories?.join(',')}');
       }
       return buffer.toString();
     }
