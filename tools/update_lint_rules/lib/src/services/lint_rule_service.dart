@@ -130,13 +130,12 @@ class LintRuleService {
           final yaml = loadYaml(responseBody);
           final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
-          // TODO: sharedNameが共通のプロパティは統合し、nameはsharedNameの値にするようにする。
-          final List<Map<String, dynamic>> json = lintCode.entries.map((e) {
-            return {
-              'name': e.key,
-              ...convertToJsonFromYaml(e.value),
-            };
-          }).toList();
+          final json = lintCode.entries
+              .where((e) => e.value['state'] != null)
+              .map((e) => {
+                    'name': e.value['sharedName'] ?? e.key,
+                    ...convertToJsonFromYaml(e.value),
+                  });
 
           final rules = json.map((e) => Rule.fromJson(e)).where((r) =>
               r.state?.keys.where((state) => state.active).isNotEmpty ?? false);
