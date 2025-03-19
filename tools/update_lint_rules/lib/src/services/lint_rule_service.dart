@@ -127,6 +127,21 @@ class LintRuleService {
 
           final responseBody = await _appClient.read(url);
 
+          Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
+            dynamic jsonValue(dynamic value) {
+              return switch (value) {
+                YamlMap() => value.map(
+                    (key, value) => MapEntry(key.toString(), jsonValue(value))),
+                YamlList() => value.map(jsonValue).toList(),
+                _ => value
+              };
+            }
+
+            return yamlMap.map(
+              (key, value) => MapEntry(key.toString(), jsonValue(value)),
+            );
+          }
+
           final yaml = loadYaml(responseBody);
           final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
@@ -143,21 +158,6 @@ class LintRuleService {
           return rules;
         },
       );
-
-  Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
-    dynamic jsonValue(dynamic value) {
-      return switch (value) {
-        YamlMap() =>
-          value.map((key, value) => MapEntry(key.toString(), jsonValue(value))),
-        YamlList() => value.map(jsonValue).toList(),
-        _ => value
-      };
-    }
-
-    return yamlMap.map(
-      (key, value) => MapEntry(key.toString(), jsonValue(value)),
-    );
-  }
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
     final containsFlutterOnlyRules =
