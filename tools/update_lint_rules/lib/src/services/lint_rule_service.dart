@@ -141,19 +141,44 @@ class LintRuleService {
     }
 
     final yaml = loadYaml(responseBody);
+
+    const sharedNameKey = 'sharedName';
+    const stateKey = 'state';
+    const categoriesKey = 'categories';
+
     final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
-    // TODO: sharedNameが共通のプロパティは統合し、nameはsharedNameの値にするようにする。
-    final List<Map<String, dynamic>> json =
-        lintCode.entries.map((e) {
-          return {'name': e.key, ...convertToJsonFromYaml(e.value)};
-        }).toList();
+    final json = lintCode.entries
+        .where((e) => e.value['state'] != null)
+        .map(
+          (e) => {
+            'name': e.value['sharedName'] ?? e.key,
+            ...convertToJsonFromYaml(e.value),
+          },
+        );
+
+    final Map<String, dynamic> sharedNameToState = {};
+    for (var rule in json) {
+      if (rule[sharedNameKey] != null && rule[stateKey] != null) {
+        sharedNameToState[rule[sharedNameKey]] = rule[stateKey];
+      }
+    }
+
+    json = json.map((rule) {
+      if (rule[sharedNameKey] != null &&
+          (rule[categoriesKey]?.isNotEmpty ?? false) &&
+          rule[stateKey] == null) {
+        rule[stateKey] = sharedNameToState[rule[sharedNameKey]];
+      }
+
+      return rule;
+    });
 
     final rules = json
+        .where((e) => e[stateKey] != null && e[categoriesKey] != null)
         .map((e) => Rule.fromJson(e))
         .where(
-          (r) =>
-              r.state?.keys.where((state) => state.active).isNotEmpty ?? false,
+          (e) => e.state?.keys.map((e) => e.active).contains(true) ?? false,
         );
 
     return rules;
