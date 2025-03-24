@@ -1,6 +1,10 @@
 name: yumemi_lints_tools_workspace
 
 environment:
-  sdk: ^3.1.0
+  sdk: ^3.7.2
 dev_dependencies:
   melos: ^6.2.0
+
+workspace:
+  - tools/check_lint_rules_identity
+  - tools/update_lint_rules/

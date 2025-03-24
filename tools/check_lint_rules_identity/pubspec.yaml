@@ -3,7 +3,9 @@ description: The CLI checks whether a particular version of a lint rule is ident
 version: 1.0.0
 
 environment:
-  sdk: ^3.1.0
+  sdk: ^3.7.2
+
+resolution: workspace
 
 dependencies:
   async: ^2.11.0
