@@ -18,7 +18,7 @@ packages:
 command:
   bootstrap:
     environment:
-      sdk: ^3.1.0
+      sdk: ^3.7.2
     dependencies:
       async: ^2.11.0
       collection: ^1.18.0
