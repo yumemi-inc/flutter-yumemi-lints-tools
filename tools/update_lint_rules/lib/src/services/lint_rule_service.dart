@@ -143,39 +143,43 @@ class LintRuleService {
 
           final yaml = loadYaml(responseBody);
 
+          const nameKey = 'name';
           const sharedNameKey = 'sharedName';
           const stateKey = 'state';
           const categoriesKey = 'categories';
 
           final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
-          var json = lintCode.entries.map((e) => {
-                'name': e.value[sharedNameKey] ?? e.key,
-                ...convertToJsonFromYaml(e.value),
-              });
+          final rules = lintCode.entries
+              .fold<List<Map<String, dynamic>>>([], (rules, entry) {
+                final rule = {
+                  nameKey: entry.value[sharedNameKey] ?? entry.key,
+                  ...convertToJsonFromYaml(entry.value),
+                };
 
-          final Map<String, dynamic> sharedNameToState = {};
-          for (var rule in json) {
-            if (rule[sharedNameKey] != null && rule[stateKey] != null) {
-              sharedNameToState[rule[sharedNameKey]] = rule[stateKey];
-            }
-          }
+                if (rule[sharedNameKey] != null &&
+                    rule[stateKey] != null &&
+                    rule[categoriesKey] == null) {
+                  final exsistsCategories = rules.firstWhereOrNull(
+                    (e) => e != rule && e[categoriesKey] != null,
+                  );
 
-          json = json.map((rule) {
-            if (rule[sharedNameKey] != null &&
-                (rule[categoriesKey]?.isNotEmpty ?? false) &&
-                rule[stateKey] == null) {
-              rule[stateKey] = sharedNameToState[rule[sharedNameKey]];
-            }
+                  if (exsistsCategories != null) {
+                    rule[categoriesKey] = exsistsCategories[categoriesKey];
+                  }
+                }
 
-            return rule;
-          });
+                if (!rules.map((e) => e[nameKey]).contains(rule[nameKey]) &&
+                    rule[stateKey] != null &&
+                    rule[categoriesKey] != null) {
+                  rules.add(rule);
+                }
 
-          final rules = json
-              .where((e) => e[stateKey] != null && e[categoriesKey] != null)
+                return rules;
+              })
               .map((e) => Rule.fromJson(e))
-              .where((e) =>
-                  e.state?.keys.map((e) => e.active).contains(true) ?? false);
+              .where((r) =>
+                  r.state?.keys.map((e) => e.active).contains(true) ?? false);
 
           return rules;
         },
