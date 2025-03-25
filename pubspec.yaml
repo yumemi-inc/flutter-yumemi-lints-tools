@@ -43,41 +43,41 @@ melos:
     gen:build:
       description: Generate code using build_runner.
       run: dart run build_runner build -d
-    exec:
-      orderDependents: true
-    packageFilters:
-      dependsOn: build_runner
+      exec:
+        orderDependents: true
+      packageFilters:
+        dependsOn: build_runner
 
-  upgrade:
-    description: Upgrade pub package dependencies.
-    run: dart pub upgrade
-    exec:
-      concurrency: 1
-      orderDependents: true
-  upgrade:major:
-    description: Upgrade pub package dependencies to latest major versions.
-    run: dart pub upgrade --major-versions
-    exec:
-      concurrency: 1
-      orderDependents: true
+    upgrade:
+      description: Upgrade pub package dependencies.
+      run: dart pub upgrade
+      exec:
+        concurrency: 1
+        orderDependents: true
+    upgrade:major:
+      description: Upgrade pub package dependencies to latest major versions.
+      run: dart pub upgrade --major-versions
+      exec:
+        concurrency: 1
+        orderDependents: true
 
-  test:
-    description: Run tests for Dart packages.
-    run: dart test
-    exec:
-      concurrency: 1
-    packageFilters:
-      dependsOn: test
-      dirExists: test
+    test:
+      description: Run tests for Dart packages.
+      run: dart test
+      exec:
+        concurrency: 1
+      packageFilters:
+        dependsOn: test
+        dirExists: test
 
-  report:test:
-    description: Generate test report for Dart packages.
-    run: dart test --file-reporter="json:test_report.log"
-    exec:
-      concurrency: 1
-    packageFilters:
-      dependsOn: test
-      dirExists: test
+    report:test:
+      description: Generate test report for Dart packages.
+      run: dart test --file-reporter="json:test_report.log"
+      exec:
+        concurrency: 1
+      packageFilters:
+        dependsOn: test
+        dirExists: test
 
   ide:
     intellij:
