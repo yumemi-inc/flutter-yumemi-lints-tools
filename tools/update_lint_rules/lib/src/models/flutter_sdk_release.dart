@@ -5,7 +5,7 @@ part 'flutter_sdk_release.freezed.dart';
 part 'flutter_sdk_release.g.dart';
 
 @freezed
-class FlutterSdkRelease with _$FlutterSdkRelease {
+abstract class FlutterSdkRelease with _$FlutterSdkRelease {
   const factory FlutterSdkRelease({
     required FlutterChannel channel,
     @_VersionJsonConverter() required Version version,
@@ -18,11 +18,7 @@ class FlutterSdkRelease with _$FlutterSdkRelease {
       _$FlutterSdkReleaseFromJson(json);
 }
 
-enum FlutterChannel {
-  dev,
-  beta,
-  stable,
-}
+enum FlutterChannel { dev, beta, stable }
 
 class _VersionJsonConverter implements JsonConverter<Version, String> {
   const _VersionJsonConverter();

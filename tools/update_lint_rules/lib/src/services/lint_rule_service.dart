@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
@@ -14,7 +15,7 @@ import 'package:update_lint_rules/src/models/severity_level.dart';
 part 'lint_rule_service.g.dart';
 
 @Riverpod(dependencies: [appClient])
-LintRuleService lintRuleService(LintRuleServiceRef ref) {
+LintRuleService lintRuleService(Ref ref) {
   final appClient = ref.watch(appClientProvider);
   return LintRuleService(
     appClient: appClient,

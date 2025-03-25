@@ -1,5 +1,6 @@
 import 'package:file/file.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/extension/version_ext.dart';
 import 'package:update_lint_rules/src/models/dart_sdk_release.dart';
@@ -12,7 +13,7 @@ import 'package:update_lint_rules/src/output_dir.dart';
 part 'analysis_options_service.g.dart';
 
 @Riverpod(dependencies: [outputDir])
-AnalysisOptionsService analysisOptionsService(AnalysisOptionsServiceRef ref) {
+AnalysisOptionsService analysisOptionsService(Ref ref) {
   final outputDir = ref.watch(outputDirProvider);
   return AnalysisOptionsService(
     outputDir: outputDir,

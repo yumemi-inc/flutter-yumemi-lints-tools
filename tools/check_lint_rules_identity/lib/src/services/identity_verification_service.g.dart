@@ -15,20 +15,23 @@ String _$dartIdentityVerificationServiceHash() =>
 @ProviderFor(dartIdentityVerificationService)
 final dartIdentityVerificationServiceProvider =
     AutoDisposeProvider<DartIdentityVerificationService>.internal(
-  dartIdentityVerificationService,
-  name: r'dartIdentityVerificationServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$dartIdentityVerificationServiceHash,
-  dependencies: <ProviderOrFamily>[dartVersionDataSourceProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    dartVersionDataSourceProvider,
-    ...?dartVersionDataSourceProvider.allTransitiveDependencies
-  },
-);
+      dartIdentityVerificationService,
+      name: r'dartIdentityVerificationServiceProvider',
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$dartIdentityVerificationServiceHash,
+      dependencies: <ProviderOrFamily>[dartVersionDataSourceProvider],
+      allTransitiveDependencies: <ProviderOrFamily>{
+        dartVersionDataSourceProvider,
+        ...?dartVersionDataSourceProvider.allTransitiveDependencies,
+      },
+    );
 
-typedef DartIdentityVerificationServiceRef
-    = AutoDisposeProviderRef<DartIdentityVerificationService>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DartIdentityVerificationServiceRef =
+    AutoDisposeProviderRef<DartIdentityVerificationService>;
 String _$flutterIdentityVerificationServiceHash() =>
     r'205e9708269bec7648518c6c341b6ddfb69fa3aa';
 
@@ -36,19 +39,22 @@ String _$flutterIdentityVerificationServiceHash() =>
 @ProviderFor(flutterIdentityVerificationService)
 final flutterIdentityVerificationServiceProvider =
     AutoDisposeProvider<FlutterIdentityVerificationService>.internal(
-  flutterIdentityVerificationService,
-  name: r'flutterIdentityVerificationServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$flutterIdentityVerificationServiceHash,
-  dependencies: <ProviderOrFamily>[flutterVersionDataSourceProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    flutterVersionDataSourceProvider,
-    ...?flutterVersionDataSourceProvider.allTransitiveDependencies
-  },
-);
+      flutterIdentityVerificationService,
+      name: r'flutterIdentityVerificationServiceProvider',
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$flutterIdentityVerificationServiceHash,
+      dependencies: <ProviderOrFamily>[flutterVersionDataSourceProvider],
+      allTransitiveDependencies: <ProviderOrFamily>{
+        flutterVersionDataSourceProvider,
+        ...?flutterVersionDataSourceProvider.allTransitiveDependencies,
+      },
+    );
 
-typedef FlutterIdentityVerificationServiceRef
-    = AutoDisposeProviderRef<FlutterIdentityVerificationService>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FlutterIdentityVerificationServiceRef =
+    AutoDisposeProviderRef<FlutterIdentityVerificationService>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

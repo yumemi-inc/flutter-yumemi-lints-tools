@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/dart_sdk_release.dart';
@@ -10,7 +11,7 @@ import 'package:update_lint_rules/src/models/flutter_sdk_release.dart';
 part 'sdk_service.g.dart';
 
 @Riverpod(dependencies: [appClient])
-SdkService sdkService(SdkServiceRef ref) {
+SdkService sdkService(Ref ref) {
   final appClient = ref.watch(appClientProvider);
   return SdkService(
     appClient: appClient,

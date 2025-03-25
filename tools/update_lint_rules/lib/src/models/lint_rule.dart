@@ -5,10 +5,8 @@ part 'lint_rule.freezed.dart';
 
 part 'lint_rule.g.dart';
 
-typedef LintRules = ({
-  Iterable<DartLintRule> dart,
-  Iterable<FlutterLintRule> flutter,
-});
+typedef LintRules =
+    ({Iterable<DartLintRule> dart, Iterable<FlutterLintRule> flutter});
 
 @freezed
 sealed class LintRule with _$LintRule {
@@ -18,7 +16,7 @@ sealed class LintRule with _$LintRule {
 }
 
 @freezed
-class Rule with _$Rule {
+abstract class Rule with _$Rule {
   const factory Rule({
     required String name,
     required String description,
@@ -36,31 +34,13 @@ class Rule with _$Rule {
   const Rule._();
 }
 
-enum RuleState {
-  stable,
-  experimental,
-  deprecated,
-  removed,
-}
+enum RuleState { stable, experimental, deprecated, removed }
 
-enum RuleSet {
-  core,
-  recommended,
-  flutter,
-}
+enum RuleSet { core, recommended, flutter }
 
-enum FixStatus {
-  unregistered,
-  needsFix,
-  needsEvaluation,
-  hasFix,
-  noFix,
-}
+enum FixStatus { unregistered, needsFix, needsEvaluation, hasFix, noFix }
 
-@Freezed(
-  fromJson: false,
-  toJson: false,
-)
+@Freezed(fromJson: false, toJson: false)
 sealed class Since with _$Since {
   const Since._();
 
@@ -84,18 +64,13 @@ sealed class Since with _$Since {
     final major = int.parse(match[1]!);
     final minor = int.parse(match[2]!);
     const patch = 0;
-    final version = Version(
-      major,
-      minor,
-      patch,
-    );
+    final version = Version(major, minor, patch);
 
     return SinceDartSdk(version);
   }
 
   String toJson() => switch (this) {
-        SinceDartSdk(version: final version) =>
-          '${version.major}.${version.minor}',
-        SinceUnreleased() => 'unreleased',
-      };
+    SinceDartSdk(version: final version) => '${version.major}.${version.minor}',
+    SinceUnreleased() => 'unreleased',
+  };
 }

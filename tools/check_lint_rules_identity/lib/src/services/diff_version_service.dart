@@ -5,6 +5,7 @@ import 'package:file/file.dart';
 import 'package:meta/meta.dart';
 
 import 'package:pub_semver/pub_semver.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'diff_version_service.g.dart';
@@ -12,7 +13,7 @@ part 'diff_version_service.g.dart';
 typedef Versions = ({Set<Version> flutter, Set<Version> dart});
 
 @Riverpod(dependencies: [versionPathsFile])
-DiffVersionService diffVersionService(DiffVersionServiceRef ref) {
+DiffVersionService diffVersionService(Ref ref) {
   final diffPathListFile = ref.watch(versionPathsFileProvider);
   return DiffVersionService(diffPathListFile);
 }
