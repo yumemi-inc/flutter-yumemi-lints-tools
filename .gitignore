@@ -3,7 +3,5 @@
 /.dart_tool/*
 
 # IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
+/.idea/*
+!/.idea/runConfigurations/
