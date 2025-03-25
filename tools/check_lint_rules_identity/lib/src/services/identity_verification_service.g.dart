@@ -9,7 +9,7 @@ part of 'identity_verification_service.dart';
 // **************************************************************************
 
 String _$dartIdentityVerificationServiceHash() =>
-    r'3769f4a4599c7a57d1470ba3edc6e04711d1cc24';
+    r'5419e6841b1a2b1784b86cdfb60429ebedd88972';
 
 /// See also [dartIdentityVerificationService].
 @ProviderFor(dartIdentityVerificationService)
@@ -33,7 +33,7 @@ final dartIdentityVerificationServiceProvider =
 typedef DartIdentityVerificationServiceRef =
     AutoDisposeProviderRef<DartIdentityVerificationService>;
 String _$flutterIdentityVerificationServiceHash() =>
-    r'205e9708269bec7648518c6c341b6ddfb69fa3aa';
+    r'5cf3b49fb75343751f92935e9e7607c4449fc960';
 
 /// See also [flutterIdentityVerificationService].
 @ProviderFor(flutterIdentityVerificationService)

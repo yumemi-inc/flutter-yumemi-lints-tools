@@ -8,7 +8,7 @@ part of 'version_paths_file.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$versionPathsFileHash() => r'5521f40656bae8c7296675d56424db2ebecee547';
+String _$versionPathsFileHash() => r'aa05ae53f076226aeb07dbe4aff09ecf208d9178';
 
 /// See also [versionPathsFile].
 @ProviderFor(versionPathsFile)

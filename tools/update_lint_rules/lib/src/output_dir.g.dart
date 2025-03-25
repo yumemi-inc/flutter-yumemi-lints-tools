@@ -8,7 +8,7 @@ part of 'output_dir.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$outputDirHash() => r'9b2f55445aabe36a8f693a27a81ace3c4c6ac0a6';
+String _$outputDirHash() => r'd7742685ecc8a928ede00cc5252217a2a094d81f';
 
 /// See also [outputDir].
 @ProviderFor(outputDir)

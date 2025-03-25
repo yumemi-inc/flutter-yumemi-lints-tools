@@ -9,7 +9,7 @@ part of 'version_data_source.dart';
 // **************************************************************************
 
 String _$dartVersionDataSourceHash() =>
-    r'e454ac2f2ba2c711a6e8755daf3aa629176080f8';
+    r'a3de9a316d340c21f62bc5643214b412c05ffc41';
 
 /// See also [dartVersionDataSource].
 @ProviderFor(dartVersionDataSource)
@@ -33,7 +33,7 @@ final dartVersionDataSourceProvider =
 typedef DartVersionDataSourceRef =
     AutoDisposeProviderRef<DartVersionDataSource>;
 String _$flutterVersionDataSourceHash() =>
-    r'3c0cde5ad990aa57e33a39da7a7bfc82de66a447';
+    r'1c142745eb65fa40bbfb5daa2efd871cdcae1895';
 
 /// See also [flutterVersionDataSource].
 @ProviderFor(flutterVersionDataSource)

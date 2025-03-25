@@ -9,7 +9,7 @@ part of 'analysis_options_service.dart';
 // **************************************************************************
 
 String _$analysisOptionsServiceHash() =>
-    r'a9428f2541cc29a7e0f64d8d8163c8638518b80a';
+    r'372e84ea1980e10830eb42cb45e2e6ba30164218';
 
 /// See also [analysisOptionsService].
 @ProviderFor(analysisOptionsService)

@@ -8,7 +8,7 @@ part of 'lint_rules_dir.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$lintRulesDirHash() => r'b47e86af20fad89c0d5bc93a3164b0d05b93a19d';
+String _$lintRulesDirHash() => r'80cd3d32cfb80e9dcfcb6428ab4f693e4a372744';
 
 /// See also [lintRulesDir].
 @ProviderFor(lintRulesDir)
