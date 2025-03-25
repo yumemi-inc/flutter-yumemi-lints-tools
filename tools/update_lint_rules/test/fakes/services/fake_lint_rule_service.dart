@@ -1,3 +1,4 @@
+import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 import 'package:update_lint_rules/src/models/not_recommended_rule.dart';
 import 'package:update_lint_rules/src/models/recommended_rule_severity.dart';
@@ -28,6 +29,11 @@ class FakeLintRuleService implements LintRuleService {
   @override
   Future<Iterable<Rule>> getRules() async {
     return [];
+  }
+
+  @override
+  Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
+    return {};
   }
 
   @override
