@@ -17,15 +17,11 @@ part 'lint_rule_service.g.dart';
 @Riverpod(dependencies: [appClient])
 LintRuleService lintRuleService(Ref ref) {
   final appClient = ref.watch(appClientProvider);
-  return LintRuleService(
-    appClient: appClient,
-  );
+  return LintRuleService(appClient: appClient);
 }
 
 class LintRuleService {
-  LintRuleService({
-    required AppClient appClient,
-  }) : _appClient = appClient;
+  LintRuleService({required AppClient appClient}) : _appClient = appClient;
 
   final AppClient _appClient;
 
@@ -63,16 +59,20 @@ class LintRuleService {
         final isFlutterOnly = await isFlutterOnlyRule(rule);
         if (isFlutterOnly) {
           return NotRecommendedRule.flutter(
-              rule: rule, reason: notRecommendedRule.reason);
+            rule: rule,
+            reason: notRecommendedRule.reason,
+          );
         } else {
           return NotRecommendedRule.dart(
-              rule: rule, reason: notRecommendedRule.reason);
+            rule: rule,
+            reason: notRecommendedRule.reason,
+          );
         }
       }),
     );
     return (
       flutter: notRecommendedAllRules.whereType<NotRecommendedFlutterRule>(),
-      dart: notRecommendedAllRules.whereType<NotRecommendedDartRule>()
+      dart: notRecommendedAllRules.whereType<NotRecommendedDartRule>(),
     );
   }
 
@@ -80,34 +80,32 @@ class LintRuleService {
     final allRules = await getRules();
 
     final recommendedRuleSeverities = await Future.wait(
-      _yumemiRecommendedRuleSeverities.map(
-        (lintRuleRecommendedSeverity) async {
-          final rule = allRules.firstWhereOrNull(
-            (rule) => lintRuleRecommendedSeverity.name == rule.name,
+      _yumemiRecommendedRuleSeverities.map((lintRuleRecommendedSeverity) async {
+        final rule = allRules.firstWhereOrNull(
+          (rule) => lintRuleRecommendedSeverity.name == rule.name,
+        );
+        if (rule == null) {
+          return null;
+        }
+
+        final reason = lintRuleRecommendedSeverity.reason;
+        final severityLevel = lintRuleRecommendedSeverity.severityLevel;
+
+        final isFlutterOnly = await isFlutterOnlyRule(rule);
+        if (isFlutterOnly) {
+          return RecommendedRuleSeverity.flutter(
+            rule: rule,
+            reason: reason,
+            severityLevel: severityLevel,
           );
-          if (rule == null) {
-            return null;
-          }
-
-          final reason = lintRuleRecommendedSeverity.reason;
-          final severityLevel = lintRuleRecommendedSeverity.severityLevel;
-
-          final isFlutterOnly = await isFlutterOnlyRule(rule);
-          if (isFlutterOnly) {
-            return RecommendedRuleSeverity.flutter(
-              rule: rule,
-              reason: reason,
-              severityLevel: severityLevel,
-            );
-          } else {
-            return RecommendedRuleSeverity.dart(
-              rule: rule,
-              reason: reason,
-              severityLevel: severityLevel,
-            );
-          }
-        },
-      ),
+        } else {
+          return RecommendedRuleSeverity.dart(
+            rule: rule,
+            reason: reason,
+            severityLevel: severityLevel,
+          );
+        }
+      }),
     );
     return (
       dart: recommendedRuleSeverities.whereType<RecommendedRuleSeverityDart>(),
@@ -119,26 +117,26 @@ class LintRuleService {
   final _allRulesMemo = AsyncMemoizer<Iterable<Rule>>();
 
   @visibleForTesting
-  Future<Iterable<Rule>> getRules() => _allRulesMemo.runOnce(
-        () async {
-          final url = Uri.https(
-            'raw.githubusercontent.com',
-            'dart-lang/sdk/main/pkg/linter/tool/machine/rules.json',
-          );
+  Future<Iterable<Rule>> getRules() => _allRulesMemo.runOnce(() async {
+    final url = Uri.https(
+      'raw.githubusercontent.com',
+      'dart-lang/sdk/main/pkg/linter/tool/machine/rules.json',
+    );
 
-          final responseBody = await _appClient.read(url);
+    final responseBody = await _appClient.read(url);
 
-          final json = jsonDecode(responseBody) as List<dynamic>;
+    final json = jsonDecode(responseBody) as List<dynamic>;
 
-          final rules = json.map((e) => Rule.fromJson(e)).where(
-                (e) => switch (e.state) {
-                  RuleState.stable || RuleState.experimental => true,
-                  RuleState.deprecated || RuleState.removed => false,
-                },
-              );
-          return rules;
-        },
-      );
+    final rules = json
+        .map((e) => Rule.fromJson(e))
+        .where(
+          (e) => switch (e.state) {
+            RuleState.stable || RuleState.experimental => true,
+            RuleState.deprecated || RuleState.removed => false,
+          },
+        );
+    return rules;
+  });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
     if (_isNotFlutterOnlyRules.contains(rule.name)) {
@@ -170,10 +168,7 @@ const _isNotFlutterOnlyRules = [
   'flutter_style_todos',
 ];
 
-typedef _NotRecommendedRule = ({
-  String name,
-  String reason,
-});
+typedef _NotRecommendedRule = ({String name, String reason});
 
 ///　Rules not recommended by YUMEMI Inc.
 const _yumemiNotRecommendedRules = <_NotRecommendedRule>[
@@ -190,14 +185,8 @@ const _yumemiNotRecommendedRules = <_NotRecommendedRule>[
     name: 'cascade_invocations',
     reason: 'There are cases that are warned but not fixed by `dart fix`.',
   ),
-  (
-    name: 'flutter_style_todos',
-    reason: "Don't use Flutter-style todos.",
-  ),
-  (
-    name: 'one_member_abstracts',
-    reason: 'May add more methods later.',
-  ),
+  (name: 'flutter_style_todos', reason: "Don't use Flutter-style todos."),
+  (name: 'one_member_abstracts', reason: 'May add more methods later.'),
   (
     name: 'prefer_double_quotes',
     reason: 'Conflicts with enabling `prefer_single_quotes`.',
@@ -214,10 +203,7 @@ const _yumemiNotRecommendedRules = <_NotRecommendedRule>[
     name: 'prefer_relative_imports',
     reason: 'Conflicts with enabling `always_use_package_imports`.',
   ),
-  (
-    name: 'public_member_api_docs',
-    reason: "Don't often develop package.",
-  ),
+  (name: 'public_member_api_docs', reason: "Don't often develop package."),
   (
     name: 'specify_nonobvious_local_variable_types',
     reason: 'Conflicts with enabling `omit_local_variable_types`.',
@@ -233,11 +219,8 @@ const _yumemiNotRecommendedRules = <_NotRecommendedRule>[
   ),
 ];
 
-typedef _RecommendedRuleSeverity = ({
-  String name,
-  String reason,
-  SeverityLevel severityLevel,
-});
+typedef _RecommendedRuleSeverity =
+    ({String name, String reason, SeverityLevel severityLevel});
 
 /// Severity levels of rule recommended by YUMEMI Inc.
 const _yumemiRecommendedRuleSeverities = <_RecommendedRuleSeverity>[

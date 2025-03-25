@@ -22,8 +22,9 @@ void main() {
         outputDirProvider.overrideWithValue(outputDir),
         lintRuleServiceProvider.overrideWithValue(FakeLintRuleService()),
         sdkServiceProvider.overrideWithValue(FakeSdkService()),
-        analysisOptionsServiceProvider
-            .overrideWithValue(FakeAnalysisOptionsService()),
+        analysisOptionsServiceProvider.overrideWithValue(
+          FakeAnalysisOptionsService(),
+        ),
       ],
     );
     addTearDown(container.dispose);

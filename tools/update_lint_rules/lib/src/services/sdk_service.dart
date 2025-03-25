@@ -13,15 +13,11 @@ part 'sdk_service.g.dart';
 @Riverpod(dependencies: [appClient])
 SdkService sdkService(Ref ref) {
   final appClient = ref.watch(appClientProvider);
-  return SdkService(
-    appClient: appClient,
-  );
+  return SdkService(appClient: appClient);
 }
 
 class SdkService {
-  const SdkService({
-    required AppClient appClient,
-  }) : _appClient = appClient;
+  const SdkService({required AppClient appClient}) : _appClient = appClient;
 
   final AppClient _appClient;
 
@@ -29,10 +25,7 @@ class SdkService {
     final url = Uri.https(
       'storage.googleapis.com',
       '/storage/v1/b/dart-archive/o',
-      {
-        'delimiter': '/',
-        'prefix': 'channels/stable/release/',
-      },
+      {'delimiter': '/', 'prefix': 'channels/stable/release/'},
     );
 
     final responseBody = await _appClient.read(url);
@@ -53,9 +46,7 @@ class SdkService {
     final versions = prefixes
         .map((prefix) {
           if (prefix is! String) {
-            throw FormatException(
-              'The type of `prefix` should be `String`.',
-            );
+            throw FormatException('The type of `prefix` should be `String`.');
           }
           return prefix.toVersionOrNull;
         })

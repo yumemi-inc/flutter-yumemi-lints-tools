@@ -15,15 +15,12 @@ part 'analysis_options_service.g.dart';
 @Riverpod(dependencies: [outputDir])
 AnalysisOptionsService analysisOptionsService(Ref ref) {
   final outputDir = ref.watch(outputDirProvider);
-  return AnalysisOptionsService(
-    outputDir: outputDir,
-  );
+  return AnalysisOptionsService(outputDir: outputDir);
 }
 
 class AnalysisOptionsService {
-  const AnalysisOptionsService({
-    required Directory outputDir,
-  }) : _outputDir = outputDir;
+  const AnalysisOptionsService({required Directory outputDir})
+    : _outputDir = outputDir;
 
   final Directory _outputDir;
 
@@ -59,15 +56,13 @@ class AnalysisOptionsService {
         },
       );
 
-      final dartOutputDir = _outputDir
-          .childDirectory('dart/${dartSdkVersion.excludePatchVersion}');
+      final dartOutputDir = _outputDir.childDirectory(
+        'dart/${dartSdkVersion.excludePatchVersion}',
+      );
 
       final allFile = dartOutputDir.childFile('all.yaml')
         ..createSync(recursive: true);
-      await outputAllLintRules(
-        outputFile: allFile,
-        lintRules: allLintRules,
-      );
+      await outputAllLintRules(outputFile: allFile, lintRules: allLintRules);
 
       final recommendedFile = dartOutputDir.childFile('recommended.yaml')
         ..createSync(recursive: true);
@@ -117,8 +112,9 @@ class AnalysisOptionsService {
         },
       );
 
-      final flutterOutputDir = _outputDir
-          .childDirectory('flutter/${flutterSdkVersion.excludePatchVersion}');
+      final flutterOutputDir = _outputDir.childDirectory(
+        'flutter/${flutterSdkVersion.excludePatchVersion}',
+      );
 
       final allFile = flutterOutputDir.childFile('all.yaml')
         ..createSync(recursive: true);
@@ -212,24 +208,28 @@ analyzer:
 ''');
 
     const indent = '    ';
-    final recommendedRuleSeveritiesTexts = recommendedRuleSeverities.map((l) {
-      final buffer = StringBuffer();
-      buffer.writeln('$indent# ${l.reason}');
-      buffer.write('$indent${l.rule.name}: ${l.severityLevel.name}');
-      return buffer.toString();
-    }).join('\n\n');
+    final recommendedRuleSeveritiesTexts = recommendedRuleSeverities
+        .map((l) {
+          final buffer = StringBuffer();
+          buffer.writeln('$indent# ${l.reason}');
+          buffer.write('$indent${l.rule.name}: ${l.severityLevel.name}');
+          return buffer.toString();
+        })
+        .join('\n\n');
     contentBuffer.writeln(recommendedRuleSeveritiesTexts);
     contentBuffer.writeln();
 
     contentBuffer.writeln('''
 linter:
   rules:''');
-    final disableLintRuleTexts = notRecommendedRules.map((l) {
-      final buffer = StringBuffer();
-      buffer.writeln('$indent# ${l.reason}');
-      buffer.write('$indent${l.rule.name}: false');
-      return buffer.toString();
-    }).join('\n\n');
+    final disableLintRuleTexts = notRecommendedRules
+        .map((l) {
+          final buffer = StringBuffer();
+          buffer.writeln('$indent# ${l.reason}');
+          buffer.write('$indent${l.rule.name}: false');
+          return buffer.toString();
+        })
+        .join('\n\n');
 
     contentBuffer.writeln(disableLintRuleTexts);
     outputFile.writeAsStringSync(contentBuffer.toString());

@@ -20,7 +20,9 @@ FlutterIdentityVerificationService flutterIdentityVerificationService(Ref ref) {
 }
 
 class DartIdentityVerificationService extends IdentityVerificationService {
-  const DartIdentityVerificationService(DartVersionDataSource super.dartVersionDataSource);
+  const DartIdentityVerificationService(
+    DartVersionDataSource super.dartVersionDataSource,
+  );
 
   @override
   bool _isEqualContent(String yamlAsString1, String yamlAsString2) =>
@@ -28,7 +30,9 @@ class DartIdentityVerificationService extends IdentityVerificationService {
 }
 
 class FlutterIdentityVerificationService extends IdentityVerificationService {
-  const FlutterIdentityVerificationService(FlutterVersionDataSource super.flutterVersionDataSource);
+  const FlutterIdentityVerificationService(
+    FlutterVersionDataSource super.flutterVersionDataSource,
+  );
 
   @override
   bool _isEqualContent(String yamlAsString1, String yamlAsString2) {
@@ -49,8 +53,9 @@ abstract class IdentityVerificationService {
     final previousVersion = await _versionDataSource.getPreviousVersion(target);
 
     final targetLint = await _versionDataSource.readAllYamlAsString(target);
-    final previousLint =
-        await _versionDataSource.readAllYamlAsString(previousVersion);
+    final previousLint = await _versionDataSource.readAllYamlAsString(
+      previousVersion,
+    );
 
     final isSame = _isEqualContent(targetLint, previousLint);
     final message =
