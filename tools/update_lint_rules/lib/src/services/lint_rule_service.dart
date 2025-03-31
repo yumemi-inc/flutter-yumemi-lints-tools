@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
 import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
@@ -189,8 +188,7 @@ class LintRuleService {
 
   @visibleForTesting
   Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
-    final jsonString = jsonEncode(yamlMap);
-    return jsonDecode(jsonString);
+    return yamlMap.toJson();
   }
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
