@@ -168,12 +168,12 @@ class LintRuleService {
                 if (rule[sharedNameKey] != null &&
                     rule[stateKey] != null &&
                     rule[categoriesKey] == null) {
-                  final existsCategories = rules.firstWhereOrNull(
+                  final ruleWithCategories = rules.firstWhereOrNull(
                     (e) => e != rule && e[categoriesKey] != null,
                   );
 
-                  if (existsCategories != null) {
-                    rule[categoriesKey] = existsCategories[categoriesKey];
+                  if (ruleWithCategories != null) {
+                    rule[categoriesKey] = ruleWithCategories[categoriesKey];
                   }
                 }
 
