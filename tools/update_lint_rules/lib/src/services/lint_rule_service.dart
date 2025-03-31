@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -187,19 +189,8 @@ class LintRuleService {
 
   @visibleForTesting
   Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
-    dynamic jsonValue(dynamic value) {
-      return switch (value) {
-        YamlMap() => value.map(
-          (key, value) => MapEntry(key.toString(), jsonValue(value)),
-        ),
-        YamlList() => value.map(jsonValue).toList(),
-        _ => value,
-      };
-    }
-
-    return yamlMap.map(
-      (key, value) => MapEntry(key.toString(), jsonValue(value)),
-    );
+    final jsonString = jsonEncode(yamlMap);
+    return jsonDecode(jsonString);
   }
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
