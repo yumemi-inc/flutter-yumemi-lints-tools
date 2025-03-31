@@ -138,9 +138,14 @@ class LintRuleService {
 
           final rules = lintCode.entries
               .fold<List<Map<String, dynamic>>>([], (rules, entry) {
+                final entryValue = entry.value;
+                if (entryValue is! YamlMap) {
+                  throw FormatException('entryValue is not YamlMap: $entryValue');
+                }
+
                 final rule = {
-                  nameKey: entry.value[sharedNameKey] ?? entry.key,
-                  ...convertToJsonFromYaml(entry.value),
+                  nameKey: entryValue[sharedNameKey] ?? entry.key,
+                  ...convertToJsonFromYaml(entryValue),
                 };
 
                 if (rule[sharedNameKey] != null &&
