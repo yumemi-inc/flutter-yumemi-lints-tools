@@ -146,6 +146,23 @@ class LintRuleService {
             ...entryValue.toJson(),
           };
 
+          // Some lint rules are defined with different names but share the same rule definition
+          // through sharedName. In such cases, the categories information might only be present
+          // in one of the definitions. We need to copy the categories from the definition that
+          // has it to ensure all instances of the same rule have consistent category information.
+          //
+          // Example YAML data:
+          // LintCode:
+          //   rule1:
+          //     sharedName: common_rule
+          //     state: active
+          //   rule2:
+          //     sharedName: common_rule
+          //     state: active
+          //     categories: [style, error]
+          //
+          // In this case, rule1 will get the categories from rule2 since they share the same
+          // rule definition through sharedName.
           if (rule[sharedNameKey] != null &&
               rule[stateKey] != null &&
               rule[categoriesKey] == null) {
