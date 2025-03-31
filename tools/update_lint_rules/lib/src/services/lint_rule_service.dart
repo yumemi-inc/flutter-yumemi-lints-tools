@@ -145,7 +145,7 @@ class LintRuleService {
 
                 final rule = {
                   nameKey: entryValue[sharedNameKey] ?? entry.key,
-                  ...convertToJsonFromYaml(entryValue),
+                  ...entryValue.toJson(),
                 };
 
                 if (rule[sharedNameKey] != null &&
@@ -175,11 +175,6 @@ class LintRuleService {
           return rules;
         },
       );
-
-  @visibleForTesting
-  Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
-    return yamlMap.toJson();
-  }
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
     final containsFlutterOnlyRules =
