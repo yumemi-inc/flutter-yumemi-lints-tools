@@ -175,6 +175,7 @@ class LintRuleService {
             }
           }
 
+          // Add the rule if it doesn't exist in the list and has a state and categories.
           if (!rules.map((e) => e[nameKey]).contains(rule[nameKey]) &&
               rule[stateKey] != null &&
               rule[categoriesKey] != null) {
