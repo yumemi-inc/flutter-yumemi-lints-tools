@@ -51,15 +51,14 @@ class AnalysisOptionsService {
     final futures = releases.map((release) async {
       final dartSdkVersion = release.version;
       final allLintRules = lintRules.where(
-        (lintRule) =>
-            lintRule.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+        (lintRule) => lintRule.rule.state.hasMinimumVersion(dartSdkVersion),
       );
 
       final filteredNotRecommendedRules = notRecommendedRules.where(
-        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
       );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
       );
 
       final dartOutputDir = _outputDir.childDirectory(
@@ -95,14 +94,13 @@ class AnalysisOptionsService {
       final flutterSdkVersion = release.version;
       final dartSdkVersion = release.dartSdkVersion;
       final allLintRules = lintRules.where(
-        (lintRule) =>
-            lintRule.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+        (lintRule) => lintRule.rule.state.hasMinimumVersion(dartSdkVersion),
       );
       final filteredNotRecommendedRules = notRecommendedRules.where(
-        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
       );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) => r.rule.state?.hasMinimumVersion(dartSdkVersion) ?? false,
+        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
       );
 
       final flutterOutputDir = _outputDir.childDirectory(
@@ -171,9 +169,8 @@ linter:
       //   buffer.write(' # incompatibles: ${incompatibles.join(',')}');
       // }
 
-      if (rule.categories case final categories
-          when categories?.isNotEmpty ?? false) {
-        buffer.write(' # categories: ${categories?.join(',')}');
+      if (rule.categories case final categories when categories.isNotEmpty) {
+        buffer.write(' # categories: ${categories.join(',')}');
       }
       return buffer.toString();
     }
