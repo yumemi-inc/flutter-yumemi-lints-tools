@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
 import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
@@ -137,23 +138,48 @@ class LintRuleService {
 
           final rules = lintCode.entries
               .fold<List<Map<String, dynamic>>>([], (rules, entry) {
+                final entryValue = entry.value;
+                if (entryValue is! YamlMap) {
+                  throw FormatException(
+                    'entryValue is not YamlMap: $entryValue',
+                  );
+                }
+
                 final rule = {
-                  nameKey: entry.value[sharedNameKey] ?? entry.key,
-                  ...convertToJsonFromYaml(entry.value),
+                  nameKey: entryValue[sharedNameKey] ?? entry.key,
+                  ...entryValue.toJson(),
                 };
 
+                // Some lint rules are defined with different names but share the same rule definition
+                // through sharedName. In such cases, the categories information might only be present
+                // in one of the definitions. We need to copy the categories from the definition that
+                // has it to ensure all instances of the same rule have consistent category information.
+                //
+                // Example YAML data:
+                // LintCode:
+                //   rule1:
+                //     sharedName: common_rule
+                //     state: active
+                //   rule2:
+                //     sharedName: common_rule
+                //     state: active
+                //     categories: [style, error]
+                //
+                // In this case, rule1 will get the categories from rule2 since they share the same
+                // rule definition through sharedName.
                 if (rule[sharedNameKey] != null &&
                     rule[stateKey] != null &&
                     rule[categoriesKey] == null) {
-                  final exsistsCategories = rules.firstWhereOrNull(
+                  final ruleWithCategories = rules.firstWhereOrNull(
                     (e) => e != rule && e[categoriesKey] != null,
                   );
 
-                  if (exsistsCategories != null) {
-                    rule[categoriesKey] = exsistsCategories[categoriesKey];
+                  if (ruleWithCategories != null) {
+                    rule[categoriesKey] = ruleWithCategories[categoriesKey];
                   }
                 }
 
+                // Add the rule if it doesn't exist in the list and has a state and categories.
                 if (!rules.map((e) => e[nameKey]).contains(rule[nameKey]) &&
                     rule[stateKey] != null &&
                     rule[categoriesKey] != null) {
@@ -169,22 +195,6 @@ class LintRuleService {
           return rules;
         },
       );
-
-  @visibleForTesting
-  Map<String, dynamic> convertToJsonFromYaml(YamlMap yamlMap) {
-    dynamic jsonValue(dynamic value) {
-      return switch (value) {
-        YamlMap() =>
-          value.map((key, value) => MapEntry(key.toString(), jsonValue(value))),
-        YamlList() => value.map(jsonValue).toList(),
-        _ => value
-      };
-    }
-
-    return yamlMap.map(
-      (key, value) => MapEntry(key.toString(), jsonValue(value)),
-    );
-  }
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
     final containsFlutterOnlyRules =

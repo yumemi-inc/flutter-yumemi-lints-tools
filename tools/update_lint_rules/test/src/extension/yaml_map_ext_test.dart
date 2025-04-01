@@ -1,15 +1,11 @@
 import 'package:yaml/yaml.dart';
-import 'package:http/http.dart';
 import 'package:test/test.dart';
-import 'package:update_lint_rules/src/clients/app_client.dart';
-import 'package:update_lint_rules/src/services/lint_rule_service.dart';
+import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
 
 void main() {
   group(
-    'convertToJsonFromYaml',
+    'YamlMapToJson',
     () {
-      final service = LintRuleService(appClient: AppClient(Client()));
-
       test('Can convert basic YamlMap to Map', () {
         final yamlString = '''
           name: test
@@ -17,8 +13,8 @@ void main() {
           isActive: true
         ''';
 
-        final yamlMap = loadYaml(yamlString);
-        final result = service.convertToJsonFromYaml(yamlMap);
+        final yamlMap = loadYaml(yamlString) as YamlMap;
+        final result = yamlMap.toJson();
 
         expect(result, {
           'name': 'test',
@@ -36,8 +32,8 @@ void main() {
               country: Japan
         ''';
 
-        final yamlMap = loadYaml(yamlString);
-        final result = service.convertToJsonFromYaml(yamlMap);
+        final yamlMap = loadYaml(yamlString) as YamlMap;
+        final result = yamlMap.toJson();
 
         expect(result, {
           'person': {
@@ -65,8 +61,8 @@ void main() {
               value: 2
         ''';
 
-        final yamlMap = loadYaml(yamlString);
-        final result = service.convertToJsonFromYaml(yamlMap);
+        final yamlMap = loadYaml(yamlString) as YamlMap;
+        final result = yamlMap.toJson();
 
         expect(result, {
           'fruits': ['apple', 'banana'],
@@ -81,8 +77,8 @@ void main() {
       test('Can convert empty YamlMap', () {
         final yamlString = '{}';
 
-        final yamlMap = loadYaml(yamlString);
-        final result = service.convertToJsonFromYaml(yamlMap);
+        final yamlMap = loadYaml(yamlString) as YamlMap;
+        final result = yamlMap.toJson();
 
         expect(result, {});
       });
