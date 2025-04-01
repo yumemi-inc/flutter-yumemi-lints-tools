@@ -390,11 +390,11 @@ Rule _$RuleFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Rule {
   String get name => throw _privateConstructorUsedError;
-  List<String>? get categories => throw _privateConstructorUsedError;
+  List<String> get categories => throw _privateConstructorUsedError;
   @JsonKey(name: 'deprecatedDetails')
   String? get details => throw _privateConstructorUsedError;
   @_StateJsonConverter()
-  Map<RuleState, Since>? get state => throw _privateConstructorUsedError;
+  Map<RuleState, Since> get state => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -408,9 +408,9 @@ abstract class $RuleCopyWith<$Res> {
   @useResult
   $Res call(
       {String name,
-      List<String>? categories,
+      List<String> categories,
       @JsonKey(name: 'deprecatedDetails') String? details,
-      @_StateJsonConverter() Map<RuleState, Since>? state});
+      @_StateJsonConverter() Map<RuleState, Since> state});
 }
 
 /// @nodoc
@@ -427,27 +427,27 @@ class _$RuleCopyWithImpl<$Res, $Val extends Rule>
   @override
   $Res call({
     Object? name = null,
-    Object? categories = freezed,
+    Object? categories = null,
     Object? details = freezed,
-    Object? state = freezed,
+    Object? state = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      categories: freezed == categories
+      categories: null == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
       details: freezed == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
               as String?,
-      state: freezed == state
+      state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as Map<RuleState, Since>?,
+              as Map<RuleState, Since>,
     ) as $Val);
   }
 }
@@ -460,9 +460,9 @@ abstract class _$$_RuleCopyWith<$Res> implements $RuleCopyWith<$Res> {
   @useResult
   $Res call(
       {String name,
-      List<String>? categories,
+      List<String> categories,
       @JsonKey(name: 'deprecatedDetails') String? details,
-      @_StateJsonConverter() Map<RuleState, Since>? state});
+      @_StateJsonConverter() Map<RuleState, Since> state});
 }
 
 /// @nodoc
@@ -475,27 +475,27 @@ class __$$_RuleCopyWithImpl<$Res> extends _$RuleCopyWithImpl<$Res, _$_Rule>
   @override
   $Res call({
     Object? name = null,
-    Object? categories = freezed,
+    Object? categories = null,
     Object? details = freezed,
-    Object? state = freezed,
+    Object? state = null,
   }) {
     return _then(_$_Rule(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      categories: freezed == categories
+      categories: null == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
       details: freezed == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
               as String?,
-      state: freezed == state
+      state: null == state
           ? _value._state
           : state // ignore: cast_nullable_to_non_nullable
-              as Map<RuleState, Since>?,
+              as Map<RuleState, Since>,
     ));
   }
 }
@@ -505,9 +505,9 @@ class __$$_RuleCopyWithImpl<$Res> extends _$RuleCopyWithImpl<$Res, _$_Rule>
 class _$_Rule extends _Rule {
   const _$_Rule(
       {required this.name,
-      required final List<String>? categories,
+      required final List<String> categories,
       @JsonKey(name: 'deprecatedDetails') required this.details,
-      @_StateJsonConverter() required final Map<RuleState, Since>? state})
+      @_StateJsonConverter() required final Map<RuleState, Since> state})
       : _categories = categories,
         _state = state,
         super._();
@@ -516,28 +516,24 @@ class _$_Rule extends _Rule {
 
   @override
   final String name;
-  final List<String>? _categories;
+  final List<String> _categories;
   @override
-  List<String>? get categories {
-    final value = _categories;
-    if (value == null) return null;
+  List<String> get categories {
     if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_categories);
   }
 
   @override
   @JsonKey(name: 'deprecatedDetails')
   final String? details;
-  final Map<RuleState, Since>? _state;
+  final Map<RuleState, Since> _state;
   @override
   @_StateJsonConverter()
-  Map<RuleState, Since>? get state {
-    final value = _state;
-    if (value == null) return null;
+  Map<RuleState, Since> get state {
     if (_state is EqualUnmodifiableMapView) return _state;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
+    return EqualUnmodifiableMapView(_state);
   }
 
   @override
@@ -583,9 +579,9 @@ class _$_Rule extends _Rule {
 abstract class _Rule extends Rule {
   const factory _Rule(
           {required final String name,
-          required final List<String>? categories,
+          required final List<String> categories,
           @JsonKey(name: 'deprecatedDetails') required final String? details,
-          @_StateJsonConverter() required final Map<RuleState, Since>? state}) =
+          @_StateJsonConverter() required final Map<RuleState, Since> state}) =
       _$_Rule;
   const _Rule._() : super._();
 
@@ -594,13 +590,13 @@ abstract class _Rule extends Rule {
   @override
   String get name;
   @override
-  List<String>? get categories;
+  List<String> get categories;
   @override
   @JsonKey(name: 'deprecatedDetails')
   String? get details;
   @override
   @_StateJsonConverter()
-  Map<RuleState, Since>? get state;
+  Map<RuleState, Since> get state;
   @override
   @JsonKey(ignore: true)
   _$$_RuleCopyWith<_$_Rule> get copyWith => throw _privateConstructorUsedError;

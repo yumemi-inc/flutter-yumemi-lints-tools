@@ -215,7 +215,7 @@ class __$$_LintCodeDtoCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_LintCodeDto implements _LintCodeDto {
+class _$_LintCodeDto extends _LintCodeDto {
   _$_LintCodeDto(
       {required this.name,
       required this.sharedName,
@@ -228,7 +228,8 @@ class _$_LintCodeDto implements _LintCodeDto {
       required this.deprecatedDetails,
       required this.todo})
       : _state = state,
-        _categories = categories;
+        _categories = categories,
+        super._();
 
   factory _$_LintCodeDto.fromJson(Map<String, dynamic> json) =>
       _$$_LintCodeDtoFromJson(json);
@@ -328,7 +329,7 @@ class _$_LintCodeDto implements _LintCodeDto {
   }
 }
 
-abstract class _LintCodeDto implements LintCodeDto {
+abstract class _LintCodeDto extends LintCodeDto {
   factory _LintCodeDto(
       {required final String name,
       required final String? sharedName,
@@ -340,6 +341,7 @@ abstract class _LintCodeDto implements LintCodeDto {
       required final String? documentation,
       required final String? deprecatedDetails,
       required final String? todo}) = _$_LintCodeDto;
+  _LintCodeDto._() : super._();
 
   factory _LintCodeDto.fromJson(Map<String, dynamic> json) =
       _$_LintCodeDto.fromJson;

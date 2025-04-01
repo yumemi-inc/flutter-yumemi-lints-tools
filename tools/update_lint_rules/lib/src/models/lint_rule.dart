@@ -20,9 +20,9 @@ sealed class LintRule with _$LintRule {
 class Rule with _$Rule {
   const factory Rule({
     required String name,
-    required List<String>? categories,
+    required List<String> categories,
     @JsonKey(name: 'deprecatedDetails') required String? details,
-    @_StateJsonConverter() required State? state,
+    @_StateJsonConverter() required State state,
   }) = _Rule;
 
   factory Rule.fromJson(Map<String, dynamic> json) => _$RuleFromJson(json);

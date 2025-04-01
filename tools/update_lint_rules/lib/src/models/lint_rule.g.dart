@@ -15,13 +15,12 @@ _$_Rule _$$_RuleFromJson(Map<String, dynamic> json) => $checkedCreate(
         final val = _$_Rule(
           name: $checkedConvert('name', (v) => v as String),
           categories: $checkedConvert('categories',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
+              (v) => (v as List<dynamic>).map((e) => e as String).toList()),
           details: $checkedConvert('deprecatedDetails', (v) => v as String?),
           state: $checkedConvert(
               'state',
-              (v) => _$JsonConverterFromJson<Map<String, dynamic>,
-                      Map<RuleState, Since>>(
-                  v, const _StateJsonConverter().fromJson)),
+              (v) => const _StateJsonConverter()
+                  .fromJson(v as Map<String, dynamic>)),
         );
         return val;
       },
@@ -32,19 +31,5 @@ Map<String, dynamic> _$$_RuleToJson(_$_Rule instance) => <String, dynamic>{
       'name': instance.name,
       'categories': instance.categories,
       'deprecatedDetails': instance.details,
-      'state':
-          _$JsonConverterToJson<Map<String, dynamic>, Map<RuleState, Since>>(
-              instance.state, const _StateJsonConverter().toJson),
+      'state': const _StateJsonConverter().toJson(instance.state),
     };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) =>
-    json == null ? null : fromJson(json as Json);
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) =>
-    value == null ? null : toJson(value);

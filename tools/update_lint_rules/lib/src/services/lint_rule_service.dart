@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
+import 'package:update_lint_rules/src/models/lint_code_dto.dart';
 import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
@@ -129,70 +130,52 @@ class LintRuleService {
 
           final yaml = loadYaml(responseBody);
 
-          const nameKey = 'name';
-          const sharedNameKey = 'sharedName';
-          const stateKey = 'state';
-          const categoriesKey = 'categories';
-
           final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
-          final rules = lintCode.entries
-              .fold<List<Map<String, dynamic>>>([], (rules, entry) {
-                final entryValue = entry.value;
-                if (entryValue is! YamlMap) {
-                  throw FormatException(
-                    'entryValue is not YamlMap: $entryValue',
-                  );
-                }
+          final codeDtos = lintCode.entries.map((e) {
+            final entryValue = e.value;
+            if (entryValue is! YamlMap) {
+              throw FormatException(
+                'entryValue is not YamlMap: $entryValue',
+              );
+            }
 
-                final rule = {
-                  nameKey: entryValue[sharedNameKey] ?? entry.key,
-                  ...entryValue.toJson(),
-                };
+            final rule = {
+              'name': entryValue['sharedName'] ?? e.key,
+              ...entryValue.toJson(),
+            };
+            return LintCodeDto.fromJson(rule);
+          });
 
-                // Some lint rules are defined with different names but share the same rule definition
-                // through sharedName. In such cases, the categories information might only be present
-                // in one of the definitions. We need to copy the categories from the definition that
-                // has it to ensure all instances of the same rule have consistent category information.
-                //
-                // Example YAML data:
-                // LintCode:
-                //   rule1:
-                //     sharedName: common_rule
-                //     state: active
-                //   rule2:
-                //     sharedName: common_rule
-                //     state: active
-                //     categories: [style, error]
-                //
-                // In this case, rule1 will get the categories from rule2 since they share the same
-                // rule definition through sharedName.
-                if (rule[sharedNameKey] != null &&
-                    rule[stateKey] != null &&
-                    rule[categoriesKey] == null) {
-                  final ruleWithCategories = rules.firstWhereOrNull(
-                    (e) => e != rule && e[categoriesKey] != null,
-                  );
+          final listBySharedName = codeDtos
+              .groupListsBy((element) => element.sharedName)
+            ..removeWhere((key, value) => key == null);
 
-                  if (ruleWithCategories != null) {
-                    rule[categoriesKey] = ruleWithCategories[categoriesKey];
-                  }
-                }
+          final ruleWithSharedNames = listBySharedName.values.map((value) {
+            final rule = Rule(
+              name: value.firstWhere((n) => n.sharedName != null).sharedName!,
+              categories:
+                  value.firstWhere((c) => c.categories != null).categories!,
+              details: value
+                  .firstWhere((d) => d.deprecatedDetails != null)
+                  .deprecatedDetails!,
+              state: value.firstWhere((s) => s.state != null).state!.map(
+                    (key, value) => MapEntry(
+                      RuleState.values.byName(key),
+                      Since.fromJson(value),
+                    ),
+                  ),
+            );
 
-                // Add the rule if it doesn't exist in the list and has a state and categories.
-                if (!rules.map((e) => e[nameKey]).contains(rule[nameKey]) &&
-                    rule[stateKey] != null &&
-                    rule[categoriesKey] != null) {
-                  rules.add(rule);
-                }
+            return rule;
+          });
 
-                return rules;
-              })
-              .map((e) => Rule.fromJson(e))
-              .where((r) =>
-                  r.state?.keys.map((e) => e.active).contains(true) ?? false);
+          final rule = codeDtos
+              .where((e) => e.canConvertToRule())
+              .map((e) => Rule.fromJson(e.toJson()));
 
-          return rules;
+          return {...ruleWithSharedNames, ...rule}
+              .where((r) => r.state.keys.map((e) => e.active).contains(true));
         },
       );
 
