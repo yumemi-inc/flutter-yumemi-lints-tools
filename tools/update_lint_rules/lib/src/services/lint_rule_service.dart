@@ -145,17 +145,24 @@ class LintRuleService {
 
     final listBySharedName = codeDtos.groupListsBy(
       (element) => element.sharedName,
-    )..removeWhere((key, value) => key == null);
+    )..removeWhere((key, _) => key == null);
 
-    final ruleWithSharedNames = listBySharedName.values.map((value) {
+    final ruleWithSharedNames = listBySharedName.entries.map((e) {
+      if (e.key == null) {
+        throw FormatException('entry.key is null: $e');
+      }
+
+      final entryValue = e.value;
+
       final rule = Rule(
-        name: value.firstWhere((n) => n.sharedName != null).sharedName!,
-        categories: value.firstWhere((c) => c.categories != null).categories!,
+        name: e.key!,
+        categories:
+            entryValue.firstWhere((c) => c.categories != null).categories!,
         details:
-            value
+            entryValue
                 .firstWhere((d) => d.deprecatedDetails != null)
                 .deprecatedDetails!,
-        state: value
+        state: entryValue
             .firstWhere((s) => s.state != null)
             .state!
             .map(
@@ -167,14 +174,15 @@ class LintRuleService {
       return rule;
     });
 
-    final rule = codeDtos
+    final rules = codeDtos
         .where((e) => e.canConvertToRule())
         .map((e) => Rule.fromJson(e.toJson()));
 
     return {
-      ...ruleWithSharedNames,
-      ...rule,
-    }.where((r) => r.state.keys.map((e) => e.active).contains(true));
+        ...ruleWithSharedNames,
+        ...rules,
+      }.where((r) => r.state.keys.map((e) => e.active).contains(true)).toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
