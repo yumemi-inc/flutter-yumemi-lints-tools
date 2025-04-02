@@ -3,10 +3,11 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 
 part 'not_recommended_rule.freezed.dart';
 
-typedef NotRecommendedRules = ({
-  Iterable<NotRecommendedDartRule> dart,
-  Iterable<NotRecommendedFlutterRule> flutter,
-});
+typedef NotRecommendedRules =
+    ({
+      Iterable<NotRecommendedDartRule> dart,
+      Iterable<NotRecommendedFlutterRule> flutter,
+    });
 
 @freezed
 sealed class NotRecommendedRule with _$NotRecommendedRule {

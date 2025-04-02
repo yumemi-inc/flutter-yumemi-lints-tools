@@ -1,29 +1,28 @@
 import 'package:check_lint_rules_identity/src/version_data_source.dart';
 import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yaml/yaml.dart';
 
 part 'identity_verification_service.g.dart';
 
 @Riverpod(dependencies: [dartVersionDataSource])
-DartIdentityVerificationService dartIdentityVerificationService(
-    DartIdentityVerificationServiceRef ref) {
+DartIdentityVerificationService dartIdentityVerificationService(Ref ref) {
   final dartVersionDataSource = ref.watch(dartVersionDataSourceProvider);
   return DartIdentityVerificationService(dartVersionDataSource);
 }
 
 @Riverpod(dependencies: [flutterVersionDataSource])
-FlutterIdentityVerificationService flutterIdentityVerificationService(
-    FlutterIdentityVerificationServiceRef ref) {
+FlutterIdentityVerificationService flutterIdentityVerificationService(Ref ref) {
   final flutterVersionDataSource = ref.watch(flutterVersionDataSourceProvider);
   return FlutterIdentityVerificationService(flutterVersionDataSource);
 }
 
 class DartIdentityVerificationService extends IdentityVerificationService {
   const DartIdentityVerificationService(
-      DartVersionDataSource dartVersionDataSource)
-      : super(dartVersionDataSource);
+    DartVersionDataSource super.dartVersionDataSource,
+  );
 
   @override
   bool _isEqualContent(String yamlAsString1, String yamlAsString2) =>
@@ -32,8 +31,8 @@ class DartIdentityVerificationService extends IdentityVerificationService {
 
 class FlutterIdentityVerificationService extends IdentityVerificationService {
   const FlutterIdentityVerificationService(
-      FlutterVersionDataSource flutterVersionDataSource)
-      : super(flutterVersionDataSource);
+    FlutterVersionDataSource super.flutterVersionDataSource,
+  );
 
   @override
   bool _isEqualContent(String yamlAsString1, String yamlAsString2) {
@@ -54,8 +53,9 @@ abstract class IdentityVerificationService {
     final previousVersion = await _versionDataSource.getPreviousVersion(target);
 
     final targetLint = await _versionDataSource.readAllYamlAsString(target);
-    final previousLint =
-        await _versionDataSource.readAllYamlAsString(previousVersion);
+    final previousLint = await _versionDataSource.readAllYamlAsString(
+      previousVersion,
+    );
 
     final isSame = _isEqualContent(targetLint, previousLint);
     final message =

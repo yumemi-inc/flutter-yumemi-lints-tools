@@ -5,6 +5,7 @@ import 'package:file/file.dart';
 import 'package:meta/meta.dart';
 
 import 'package:pub_semver/pub_semver.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'diff_version_service.g.dart';
@@ -12,7 +13,7 @@ part 'diff_version_service.g.dart';
 typedef Versions = ({Set<Version> flutter, Set<Version> dart});
 
 @Riverpod(dependencies: [versionPathsFile])
-DiffVersionService diffVersionService(DiffVersionServiceRef ref) {
+DiffVersionService diffVersionService(Ref ref) {
   final diffPathListFile = ref.watch(versionPathsFileProvider);
   return DiffVersionService(diffPathListFile);
 }
@@ -23,14 +24,16 @@ class DiffVersionService {
   Versions getDiffVersion() {
     final paths = diffPathListFile.readAsLinesSync();
     final versions = paths.map(extractVersion);
-    final flutterVersions = versions
-        .where((version) => version.type == LintType.flutter)
-        .map((version) => version.version)
-        .toSet();
-    final dartVersions = versions
-        .where((version) => version.type == LintType.dart)
-        .map((version) => version.version)
-        .toSet();
+    final flutterVersions =
+        versions
+            .where((version) => version.type == LintType.flutter)
+            .map((version) => version.version)
+            .toSet();
+    final dartVersions =
+        versions
+            .where((version) => version.type == LintType.dart)
+            .map((version) => version.version)
+            .toSet();
     return (flutter: flutterVersions, dart: dartVersions);
   }
 
@@ -44,7 +47,8 @@ class DiffVersionService {
     final typeText = match?.namedGroup(nameType);
 
     final versionParsingException = FormatException(
-        '[Version Parsing Exception] Version parsing from Path failed. The pull request may contain changes other than LintRule. \nPATH=$path');
+      '[Version Parsing Exception] Version parsing from Path failed. The pull request may contain changes other than LintRule. \nPATH=$path',
+    );
 
     if (versionText == null || typeText == null) {
       throw versionParsingException;

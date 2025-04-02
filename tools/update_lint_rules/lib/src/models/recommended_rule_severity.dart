@@ -4,10 +4,11 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 
 part 'recommended_rule_severity.freezed.dart';
 
-typedef RecommendedRuleSeverities = ({
-  Iterable<RecommendedRuleSeverityDart> dart,
-  Iterable<RecommendedRuleSeverityFlutter> flutter,
-});
+typedef RecommendedRuleSeverities =
+    ({
+      Iterable<RecommendedRuleSeverityDart> dart,
+      Iterable<RecommendedRuleSeverityFlutter> flutter,
+    });
 
 @freezed
 sealed class RecommendedRuleSeverity with _$RecommendedRuleSeverity {

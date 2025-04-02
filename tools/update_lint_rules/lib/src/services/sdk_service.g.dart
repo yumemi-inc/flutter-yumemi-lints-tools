@@ -8,7 +8,7 @@ part of 'sdk_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sdkServiceHash() => r'430041398e0b0082d7b6dfd8b6ec9ef1440ca8a0';
+String _$sdkServiceHash() => r'a72a4e9bdd7f9e92486a1c39510a036b81210cd9';
 
 /// See also [sdkService].
 @ProviderFor(sdkService)
@@ -20,10 +20,12 @@ final sdkServiceProvider = AutoDisposeProvider<SdkService>.internal(
   dependencies: <ProviderOrFamily>[appClientProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
     appClientProvider,
-    ...?appClientProvider.allTransitiveDependencies
+    ...?appClientProvider.allTransitiveDependencies,
   },
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SdkServiceRef = AutoDisposeProviderRef<SdkService>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

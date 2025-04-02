@@ -8,7 +8,7 @@ part of 'app_client.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appClientHash() => r'ef8530eab0482762644d5fccab69a4eccdd0bfd4';
+String _$appClientHash() => r'6a50ccf3d5edc62417c297a0292d69b6e1ef2fd0';
 
 /// See also [appClient].
 @ProviderFor(appClient)
@@ -21,6 +21,8 @@ final appClientProvider = Provider<AppClient>.internal(
   allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AppClientRef = ProviderRef<AppClient>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

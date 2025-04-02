@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/dart_sdk_release.dart';
@@ -10,17 +11,13 @@ import 'package:update_lint_rules/src/models/flutter_sdk_release.dart';
 part 'sdk_service.g.dart';
 
 @Riverpod(dependencies: [appClient])
-SdkService sdkService(SdkServiceRef ref) {
+SdkService sdkService(Ref ref) {
   final appClient = ref.watch(appClientProvider);
-  return SdkService(
-    appClient: appClient,
-  );
+  return SdkService(appClient: appClient);
 }
 
 class SdkService {
-  const SdkService({
-    required AppClient appClient,
-  }) : _appClient = appClient;
+  const SdkService({required AppClient appClient}) : _appClient = appClient;
 
   final AppClient _appClient;
 
@@ -28,10 +25,7 @@ class SdkService {
     final url = Uri.https(
       'storage.googleapis.com',
       '/storage/v1/b/dart-archive/o',
-      {
-        'delimiter': '/',
-        'prefix': 'channels/stable/release/',
-      },
+      {'delimiter': '/', 'prefix': 'channels/stable/release/'},
     );
 
     final responseBody = await _appClient.read(url);
@@ -52,9 +46,7 @@ class SdkService {
     final versions = prefixes
         .map((prefix) {
           if (prefix is! String) {
-            throw FormatException(
-              'The type of `prefix` should be `String`.',
-            );
+            throw FormatException('The type of `prefix` should be `String`.');
           }
           return prefix.toVersionOrNull;
         })

@@ -1,7 +1,4 @@
-enum LintType {
-  dart,
-  flutter,
-}
+enum LintType { dart, flutter }
 
 extension ByNameOrNull<T extends Enum> on List<T> {
   T? byNameOrNull(String name) {

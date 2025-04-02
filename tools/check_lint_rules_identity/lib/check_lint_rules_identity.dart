@@ -15,14 +15,16 @@ Future<ExitStatus> run(List<String> argument) async {
   if (diffPathListFilePath == null ||
       !fileSystem.isFileSync(diffPathListFilePath)) {
     throw ArgumentError(
-        'The first argument must be a valid path to an existing file.');
+      'The first argument must be a valid path to an existing file.',
+    );
   }
 
   final lintRulesDirPath = argument.elementAtOrNull(1);
   if (lintRulesDirPath == null ||
       !fileSystem.isDirectorySync(lintRulesDirPath)) {
     throw ArgumentError(
-        'The input value must be a valid path to an existing directory.');
+      'The input value must be a valid path to an existing directory.',
+    );
   }
 
   final File diffPathListFile = fileSystem.file(diffPathListFilePath);
@@ -45,17 +47,21 @@ Future<ExitStatus> run(List<String> argument) async {
 @visibleForTesting
 Future<ExitStatus> checkLintRulesIdentity(ProviderContainer container) async {
   final diffVersionService = container.read(diffVersionServiceProvider);
-  final dartIdentityVerificationService =
-      container.read(dartIdentityVerificationServiceProvider);
-  final flutterIdentityVerificationService =
-      container.read(flutterIdentityVerificationServiceProvider);
+  final dartIdentityVerificationService = container.read(
+    dartIdentityVerificationServiceProvider,
+  );
+  final flutterIdentityVerificationService = container.read(
+    flutterIdentityVerificationServiceProvider,
+  );
 
   try {
     final diffVersions = diffVersionService.getDiffVersion();
-    final isDartIdentity = await diffVersions.dart
-        .asyncEvery(dartIdentityVerificationService.isIdenticalLintRule);
-    final isFlutterIdentity = await diffVersions.flutter
-        .asyncEvery(flutterIdentityVerificationService.isIdenticalLintRule);
+    final isDartIdentity = await diffVersions.dart.asyncEvery(
+      dartIdentityVerificationService.isIdenticalLintRule,
+    );
+    final isFlutterIdentity = await diffVersions.flutter.asyncEvery(
+      flutterIdentityVerificationService.isIdenticalLintRule,
+    );
 
     if (isDartIdentity && isFlutterIdentity) {
       return ExitStatus.success;

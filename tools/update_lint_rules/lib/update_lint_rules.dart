@@ -25,9 +25,7 @@ Future<ExitStatus> run(List<String> args) async {
   }
 
   final container = ProviderContainer(
-    overrides: [
-      outputDirProvider.overrideWithValue(outputDir),
-    ],
+    overrides: [outputDirProvider.overrideWithValue(outputDir)],
   );
   try {
     final exitStatus = await updateLintRules(container);

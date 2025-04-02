@@ -2,8 +2,7 @@
 enum ExitStatus {
   success(0),
   warnings(1),
-  errors(2),
-  ;
+  errors(2);
 
   const ExitStatus(this.code);
 

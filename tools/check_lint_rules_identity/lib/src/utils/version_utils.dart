@@ -14,11 +14,7 @@ Version parseStringToVersion(String version) {
     final minor = int.parse(match[2]!);
     const patch = 0;
 
-    return Version(
-      major,
-      minor,
-      patch,
-    );
+    return Version(major, minor, patch);
   } on FormatException catch (e) {
     throw FormatException('Could not parse "$version". ${e.message}');
   }

@@ -12,7 +12,7 @@ sealed class GitHubToken with _$GitHubToken {
       _GitHubTokenWithBearerToken;
 
   String get headerValue => switch (this) {
-        _GitHubTokenWithToken(token: final token) => 'token $token',
-        _GitHubTokenWithBearerToken(token: final token) => 'Bearer $token',
-      };
+    _GitHubTokenWithToken(token: final token) => 'token $token',
+    _GitHubTokenWithBearerToken(token: final token) => 'Bearer $token',
+  };
 }
