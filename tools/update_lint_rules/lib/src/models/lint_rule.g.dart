@@ -18,7 +18,7 @@ _Rule _$RuleFromJson(Map<String, dynamic> json) => $checkedCreate(
         'categories',
         (v) => (v as List<dynamic>).map((e) => e as String).toList(),
       ),
-      details: $checkedConvert('deprecatedDetails', (v) => v as String?),
+      details: $checkedConvert('deprecatedDetails', (v) => v as String),
       state: $checkedConvert(
         'state',
         (v) => const _StateJsonConverter().fromJson(v as Map<String, dynamic>),

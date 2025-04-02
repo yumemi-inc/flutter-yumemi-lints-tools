@@ -19,7 +19,7 @@ abstract class Rule with _$Rule {
   const factory Rule({
     required String name,
     required List<String> categories,
-    @JsonKey(name: 'deprecatedDetails') required String? details,
+    @JsonKey(name: 'deprecatedDetails') required String details,
     @_StateJsonConverter() required State state,
   }) = _Rule;
 

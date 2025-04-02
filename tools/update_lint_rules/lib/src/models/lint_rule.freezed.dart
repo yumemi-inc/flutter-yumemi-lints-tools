@@ -236,7 +236,7 @@ $RuleCopyWith<$Res> get rule {
 /// @nodoc
 mixin _$Rule {
 
- String get name; List<String> get categories;@JsonKey(name: 'deprecatedDetails') String? get details;@_StateJsonConverter() State get state;
+ String get name; List<String> get categories;@JsonKey(name: 'deprecatedDetails') String get details;@_StateJsonConverter() State get state;
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -269,7 +269,7 @@ abstract mixin class $RuleCopyWith<$Res>  {
   factory $RuleCopyWith(Rule value, $Res Function(Rule) _then) = _$RuleCopyWithImpl;
 @useResult
 $Res call({
- String name, List<String> categories,@JsonKey(name: 'deprecatedDetails') String? details,@_StateJsonConverter() Map<RuleState, Since> state
+ String name, List<String> categories,@JsonKey(name: 'deprecatedDetails') String details,@_StateJsonConverter() Map<RuleState, Since> state
 });
 
 
@@ -286,12 +286,12 @@ class _$RuleCopyWithImpl<$Res>
 
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? categories = null,Object? details = freezed,Object? state = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? categories = null,Object? details = null,Object? state = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
-as List<String>,details: freezed == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
-as String?,state: null == state ? _self.state! : state // ignore: cast_nullable_to_non_nullable
+as List<String>,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state! : state // ignore: cast_nullable_to_non_nullable
 as Map<RuleState, Since>,
   ));
 }
@@ -314,7 +314,7 @@ class _Rule extends Rule {
   return EqualUnmodifiableListView(_categories);
 }
 
-@override@JsonKey(name: 'deprecatedDetails') final  String? details;
+@override@JsonKey(name: 'deprecatedDetails') final  String details;
  final  Map<RuleState, Since> _state;
 @override@_StateJsonConverter() Map<RuleState, Since> get state {
   if (_state is EqualUnmodifiableMapView) return _state;
@@ -356,7 +356,7 @@ abstract mixin class _$RuleCopyWith<$Res> implements $RuleCopyWith<$Res> {
   factory _$RuleCopyWith(_Rule value, $Res Function(_Rule) _then) = __$RuleCopyWithImpl;
 @override @useResult
 $Res call({
- String name, List<String> categories,@JsonKey(name: 'deprecatedDetails') String? details,@_StateJsonConverter() Map<RuleState, Since> state
+ String name, List<String> categories,@JsonKey(name: 'deprecatedDetails') String details,@_StateJsonConverter() Map<RuleState, Since> state
 });
 
 
@@ -373,12 +373,12 @@ class __$RuleCopyWithImpl<$Res>
 
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? categories = null,Object? details = freezed,Object? state = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? categories = null,Object? details = null,Object? state = null,}) {
   return _then(_Rule(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<String>,details: freezed == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
-as String?,state: null == state ? _self._state : state // ignore: cast_nullable_to_non_nullable
+as List<String>,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self._state : state // ignore: cast_nullable_to_non_nullable
 as Map<RuleState, Since>,
   ));
 }
