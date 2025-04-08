@@ -148,18 +148,16 @@ class LintRuleService {
           });
 
           final listBySharedName = codeDtos
-              .groupListsBy((element) => element.sharedName)
-            ..removeWhere((key, _) => key == null);
+              .where((dto) => dto.sharedName != null)
+              // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
+              // So, group by `dto.name`.
+              .groupListsBy((dto) => dto.name);
 
           final ruleWithSharedNames = listBySharedName.entries.map((e) {
-            if (e.key == null) {
-              throw FormatException('entry.key is null: $e');
-            }
-
             final entryValue = e.value;
 
             final rule = Rule(
-              name: e.key!,
+              name: e.key,
               categories: entryValue
                   .firstWhere((c) => c.categories != null)
                   .categories!,
