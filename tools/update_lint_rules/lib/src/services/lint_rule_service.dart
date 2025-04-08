@@ -152,17 +152,19 @@ class LintRuleService {
     final ruleWithSharedNames = groupedLintCodeDtosBySharedName.entries.map((
       e,
     ) {
-      final entryValue = e.value;
+      final lintCodeDtosBySharedName = e.value;
 
       final rule = Rule(
         name: e.key,
         categories:
-            entryValue.firstWhere((c) => c.categories != null).categories!,
+            lintCodeDtosBySharedName
+                .firstWhere((c) => c.categories != null)
+                .categories!,
         details:
-            entryValue
+            lintCodeDtosBySharedName
                 .firstWhere((d) => d.deprecatedDetails != null)
                 .deprecatedDetails!,
-        state: entryValue
+        state: lintCodeDtosBySharedName
             .firstWhere((s) => s.state != null)
             .state!
             .map(
