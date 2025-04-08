@@ -147,13 +147,13 @@ class LintRuleService {
             return LintCodeDto.fromJson(rule);
           });
 
-          final listBySharedName = codeDtos
+          final groupedLintCodeDtosBySharedName = codeDtos
               .where((dto) => dto.sharedName != null)
               // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
               // So, group by `dto.name`.
               .groupListsBy((dto) => dto.name);
 
-          final ruleWithSharedNames = listBySharedName.entries.map((e) {
+          final ruleWithSharedNames = groupedLintCodeDtosBySharedName.entries.map((e) {
             final entryValue = e.value;
 
             final rule = Rule(
