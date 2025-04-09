@@ -88,8 +88,8 @@ as String?,
 /// @nodoc
 @JsonSerializable()
 
-class _LintCodeDto extends LintCodeDto {
-   _LintCodeDto({required this.name, required this.sharedName, required this.problemMessage, required this.correctionMessage, required final  Map<String, dynamic>? state, required final  List<String>? categories, required this.hasPublishedDocs, required this.documentation, required this.deprecatedDetails, required this.todo}): _state = state,_categories = categories,super._();
+class _LintCodeDto implements LintCodeDto {
+   _LintCodeDto({required this.name, required this.sharedName, required this.problemMessage, required this.correctionMessage, required final  Map<String, dynamic>? state, required final  List<String>? categories, required this.hasPublishedDocs, required this.documentation, required this.deprecatedDetails, required this.todo}): _state = state,_categories = categories;
   factory _LintCodeDto.fromJson(Map<String, dynamic> json) => _$LintCodeDtoFromJson(json);
 
 @override final  String name;

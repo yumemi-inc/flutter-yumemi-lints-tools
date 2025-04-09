@@ -18,11 +18,6 @@ sealed class LintCodeDto with _$LintCodeDto {
     required String? todo,
   }) = _LintCodeDto;
 
-  const LintCodeDto._();
-
   factory LintCodeDto.fromJson(Map<String, dynamic> json) =>
       _$LintCodeDtoFromJson(json);
-
-  bool canConvertToRule() =>
-      deprecatedDetails != null && categories != null && state != null;
 }
