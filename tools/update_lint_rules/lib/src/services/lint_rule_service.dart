@@ -147,7 +147,10 @@ class LintRuleService {
 
     // Group DTOs by sharedName
     final groupedLintCodeDtosBySharedName = codeDtos
-        .where((dto) => dto.sharedName != null)
+        .where(
+          (dto) =>
+              dto.sharedName != null && LintCodeDtoMapper.canConvertToRule(dto),
+        )
         // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
         // So, group by `dto.name`.
         .groupListsBy((dto) => dto.name);
