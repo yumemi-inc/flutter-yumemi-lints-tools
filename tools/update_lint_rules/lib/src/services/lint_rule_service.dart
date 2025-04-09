@@ -115,10 +115,10 @@ class LintRuleService {
     );
   }
 
-  final _allRulesMemo = AsyncMemoizer<Iterable<Rule>>();
+  final _allRulesMemo = AsyncMemoizer<List<Rule>>();
 
   @visibleForTesting
-  Future<Iterable<Rule>> getRules() => _allRulesMemo.runOnce(() async {
+  Future<List<Rule>> getRules() => _allRulesMemo.runOnce(() async {
     final url = Uri.https(
       'raw.githubusercontent.com',
       'dart-lang/sdk/main/pkg/linter/messages.yaml',
