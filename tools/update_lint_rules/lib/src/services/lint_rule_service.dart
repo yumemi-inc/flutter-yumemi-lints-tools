@@ -153,26 +153,32 @@ class LintRuleService {
       e,
     ) {
       final lintCodeDtosBySharedName = e.value;
-      final rule = Rule(
+      final categories =
+          lintCodeDtosBySharedName
+              .map((e) => e.categories)
+              .nonNulls
+              .firstOrNull;
+      final details =
+          lintCodeDtosBySharedName
+              .map((e) => e.deprecatedDetails)
+              .nonNulls
+              .firstOrNull;
+      final state =
+          lintCodeDtosBySharedName.map((e) => e.state).nonNulls.firstOrNull;
+      if (categories == null || details == null || state == null) {
+        throw FormatException(
+          'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
+        );
+      }
+      return Rule(
         name: e.key,
-        categories:
-            lintCodeDtosBySharedName.map((e) => e.categories).nonNulls.first,
-        details:
-            lintCodeDtosBySharedName
-                .map((e) => e.deprecatedDetails)
-                .nonNulls
-                .first,
-        state: lintCodeDtosBySharedName
-            .map((e) => e.state)
-            .nonNulls
-            .first
-            .map(
-              (key, value) =>
-                  MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
-            ),
+        categories: categories,
+        details: details,
+        state: state.map(
+          (key, value) =>
+              MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
+        ),
       );
-
-      return rule;
     });
 
     final rules = codeDtos
