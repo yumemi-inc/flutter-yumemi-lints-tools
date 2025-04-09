@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
+import 'package:update_lint_rules/src/mappers/lint_code_dto_mapper.dart';
 import 'package:update_lint_rules/src/models/lint_code_dto.dart';
 import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
@@ -152,60 +153,17 @@ class LintRuleService {
         .groupListsBy((dto) => dto.name);
 
     // Convert DTOs with sharedName to Rules
-    final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map((
-      e,
-    ) {
-      final lintCodeDtosWithSharedName = e.value;
-      final categories =
-          lintCodeDtosWithSharedName
-              .map((e) => e.categories)
-              .nonNulls
-              .firstOrNull;
-      final details =
-          lintCodeDtosWithSharedName
-              .map((e) => e.deprecatedDetails)
-              .nonNulls
-              .firstOrNull;
-      final state =
-          lintCodeDtosWithSharedName.map((e) => e.state).nonNulls.firstOrNull;
-      if (categories == null || details == null || state == null) {
-        throw FormatException(
-          'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
-        );
-      }
-      return Rule(
-        name: e.key,
-        categories: categories,
-        details: details,
-        state: state.map(
-          (key, value) =>
-              MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
-        ),
-      );
-    });
+    final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map(
+      (e) => LintCodeDtoMapper.toRuleFromDtos(sharedName: e.key, dtos: e.value),
+    );
 
     // Convert DTOs without sharedName to Rules
     final rulesWithoutSharedName = codeDtos
-        .where((dto) => dto.sharedName == null)
-        .map((e) {
-          final categories = e.categories;
-          final details = e.deprecatedDetails;
-          final state = e.state;
-          if (categories == null || details == null || state == null) {
-            throw FormatException(
-              'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
-            );
-          }
-          return Rule(
-            name: e.name,
-            categories: categories,
-            details: details,
-            state: state.map(
-              (key, value) =>
-                  MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
-            ),
-          );
-        });
+        .where(
+          (dto) =>
+              dto.sharedName == null && LintCodeDtoMapper.canConvertToRule(dto),
+        )
+        .map((e) => LintCodeDtoMapper.toRule(e));
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
 
