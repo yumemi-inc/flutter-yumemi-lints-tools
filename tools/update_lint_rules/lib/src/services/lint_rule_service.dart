@@ -130,6 +130,7 @@ class LintRuleService {
 
     final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
 
+    // Convert to DTOs
     final codeDtos = lintCode.entries.map((e) {
       final entryValue = e.value;
       if (entryValue is! YamlMap) {
@@ -143,12 +144,14 @@ class LintRuleService {
       return LintCodeDto.fromJson(rule);
     });
 
+    // Group DTOs by sharedName
     final groupedLintCodeDtosBySharedName = codeDtos
         .where((dto) => dto.sharedName != null)
         // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
         // So, group by `dto.name`.
         .groupListsBy((dto) => dto.name);
 
+    // Convert DTOs with sharedName to Rules
     final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map((
       e,
     ) {
@@ -181,6 +184,7 @@ class LintRuleService {
       );
     });
 
+    // Convert DTOs without sharedName to Rules
     final rulesWithoutSharedName = codeDtos
         .where((dto) => dto.sharedName == null)
         .map((e) {
@@ -204,6 +208,8 @@ class LintRuleService {
         });
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
+
+    // Filter out inactive rules and sort by name
     return allRules
         .where((r) => r.state.keys.map((e) => e.active).contains(true))
         .sorted((a, b) => a.name.compareTo(b.name))
