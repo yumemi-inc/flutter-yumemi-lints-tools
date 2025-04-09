@@ -158,16 +158,16 @@ class LintRuleService {
           // Convert DTOs with sharedName to Rules
           final rulesWithSharedName =
               groupedLintCodeDtosBySharedName.entries.map((e) {
-            final lintCodeDtosBySharedName = e.value;
-            final categories = lintCodeDtosBySharedName
+            final lintCodeDtosWithSharedName = e.value;
+            final categories = lintCodeDtosWithSharedName
                 .map((e) => e.categories)
                 .nonNulls
                 .firstOrNull;
-            final details = lintCodeDtosBySharedName
+            final details = lintCodeDtosWithSharedName
                 .map((e) => e.deprecatedDetails)
                 .nonNulls
                 .firstOrNull;
-            final state = lintCodeDtosBySharedName
+            final state = lintCodeDtosWithSharedName
                 .map((e) => e.state)
                 .nonNulls
                 .firstOrNull;
