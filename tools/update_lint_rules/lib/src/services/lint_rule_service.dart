@@ -219,7 +219,8 @@ class LintRuleService {
             },
           );
 
-          return {...rulesWithSharedName, ...rulesWithoutSharedName}
+          final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
+          return allRules
               .where((r) => r.state.keys.map((e) => e.active).contains(true))
               .toList()
             ..sort((a, b) => a.name.compareTo(b.name));
