@@ -228,8 +228,7 @@ class LintRuleService {
           // Filter out inactive rules and sort by name
           return allRules
               .where((r) => r.state.keys.map((e) => e.active).contains(true))
-              .sorted((a, b) => a.name.compareTo(b.name))
-              .toList();
+              .sorted((a, b) => a.name.compareTo(b.name));
         },
       );
 
