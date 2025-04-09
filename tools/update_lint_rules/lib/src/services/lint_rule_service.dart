@@ -190,11 +190,36 @@ class LintRuleService {
             );
           });
 
-          final rules = codeDtos
-              .where((e) => e.canConvertToRule())
-              .map((e) => Rule.fromJson(e.toJson()));
+          final rulesWithoutSharedName =
+              codeDtos.where((dto) => dto.sharedName == null).map(
+            (e) {
+              final categories = e.categories;
+              final details = e.deprecatedDetails;
+              final state = e.state;
+              if (categories == null || details == null || state == null) {
+                throw FormatException(
+                  'Required fields are null: ${[
+                    if (categories == null) 'categories',
+                    if (details == null) 'details',
+                    if (state == null) 'state',
+                  ].join(', ')}',
+                );
+              }
+              return Rule(
+                name: e.name,
+                categories: categories,
+                details: details,
+                state: state.map(
+                  (key, value) => MapEntry(
+                    RuleState.values.byName(key),
+                    Since.fromJson(value),
+                  ),
+                ),
+              );
+            },
+          );
 
-          return {...rulesWithSharedName, ...rules}
+          return {...rulesWithSharedName, ...rulesWithoutSharedName}
               .where((r) => r.state.keys.map((e) => e.active).contains(true))
               .toList()
             ..sort((a, b) => a.name.compareTo(b.name));
