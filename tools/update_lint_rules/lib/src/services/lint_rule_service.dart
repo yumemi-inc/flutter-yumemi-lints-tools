@@ -155,19 +155,19 @@ class LintRuleService {
     final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map((
       e,
     ) {
-      final lintCodeDtosBySharedName = e.value;
+      final lintCodeDtosWithSharedName = e.value;
       final categories =
-          lintCodeDtosBySharedName
+          lintCodeDtosWithSharedName
               .map((e) => e.categories)
               .nonNulls
               .firstOrNull;
       final details =
-          lintCodeDtosBySharedName
+          lintCodeDtosWithSharedName
               .map((e) => e.deprecatedDetails)
               .nonNulls
               .firstOrNull;
       final state =
-          lintCodeDtosBySharedName.map((e) => e.state).nonNulls.firstOrNull;
+          lintCodeDtosWithSharedName.map((e) => e.state).nonNulls.firstOrNull;
       if (categories == null || details == null || state == null) {
         throw FormatException(
           'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
