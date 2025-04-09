@@ -153,7 +153,8 @@ class LintRuleService {
               // So, group by `dto.name`.
               .groupListsBy((dto) => dto.name);
 
-          final ruleWithSharedNames = groupedLintCodeDtosBySharedName.entries.map((e) {
+          final rulesWithSharedName =
+              groupedLintCodeDtosBySharedName.entries.map((e) {
             final lintCodeDtosBySharedName = e.value;
             final rule = Rule(
               name: e.key,
@@ -184,7 +185,7 @@ class LintRuleService {
               .where((e) => e.canConvertToRule())
               .map((e) => Rule.fromJson(e.toJson()));
 
-          return {...ruleWithSharedNames, ...rules}
+          return {...rulesWithSharedName, ...rules}
               .where((r) => r.state.keys.map((e) => e.active).contains(true))
               .toList()
             ..sort((a, b) => a.name.compareTo(b.name));
