@@ -146,14 +146,8 @@ class LintRuleService {
     });
 
     // Group DTOs by sharedName
-    final groupedLintCodeDtosBySharedName = codeDtos
-        .where(
-          (dto) =>
-              dto.sharedName != null && LintCodeDtoMapper.canConvertToRule(dto),
-        )
-        // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
-        // So, group by `dto.name`.
-        .groupListsBy((dto) => dto.name);
+    final groupedLintCodeDtosBySharedName =
+        LintCodeDtoMapper.groupLintCodeDtosBySharedName(codeDtos.toList());
 
     // Convert DTOs with sharedName to Rules
     final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map(
@@ -161,12 +155,10 @@ class LintRuleService {
     );
 
     // Convert DTOs without sharedName to Rules
-    final rulesWithoutSharedName = codeDtos
-        .where(
-          (dto) =>
-              dto.sharedName == null && LintCodeDtoMapper.canConvertToRule(dto),
-        )
-        .map((e) => LintCodeDtoMapper.toRule(e));
+    final rulesWithoutSharedName =
+        LintCodeDtoMapper.filterLintCodeDtosBySharedName(
+          codeDtos,
+        ).map(LintCodeDtoMapper.toRule);
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
 

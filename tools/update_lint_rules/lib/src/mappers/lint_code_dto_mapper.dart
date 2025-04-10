@@ -12,6 +12,30 @@ class LintCodeDtoMapper {
         dto.state != null;
   }
 
+  // Group DTOs by sharedName
+  static Map<String, List<LintCodeDto>> groupLintCodeDtosBySharedName(
+    List<LintCodeDto> dtos,
+  ) {
+    return dtos
+        .where(
+          (dto) =>
+              dto.sharedName != null && LintCodeDtoMapper.canConvertToRule(dto),
+        )
+        // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
+        // So, group by `dto.name`.
+        .groupListsBy((dto) => dto.name);
+  }
+
+  /// Filter [LintCodeDto] by sharedName
+  static Iterable<LintCodeDto> filterLintCodeDtosBySharedName(
+    Iterable<LintCodeDto> dtos,
+  ) {
+    return dtos.where(
+      (dto) =>
+          dto.sharedName == null && LintCodeDtoMapper.canConvertToRule(dto),
+    );
+  }
+
   /// Convert [LintCodeDto] to [Rule]
   static Rule toRule(LintCodeDto dto) {
     final categories = dto.categories;
