@@ -46,7 +46,7 @@ class LintCodeDtoMapper {
     required String sharedName,
     required List<LintCodeDto> dtos,
   }) {
-    if (dtos.any((dto) => dto.name != sharedName)) {
+    if (dtos.any((dto) => dto.sharedName != sharedName)) {
       throw ArgumentError(
         'All LintCodeDto objects must have the same name: $sharedName',
       );
