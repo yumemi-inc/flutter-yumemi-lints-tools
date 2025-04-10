@@ -26,7 +26,7 @@ class FakeLintRuleService implements LintRuleService {
   }
 
   @override
-  Future<Iterable<Rule>> getRules() async {
+  Future<List<Rule>> getRules() async {
     return [];
   }
 
