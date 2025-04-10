@@ -26,7 +26,14 @@ void main() {
         expect(rule.name, equals('test_name'));
         expect(rule.categories, equals(['style']));
         expect(rule.details, equals('test_details'));
-        expect(rule.state.keys, contains(RuleState.stable));
+        expect(
+          rule.state[RuleState.removed],
+          equals(Since.dartSdk(Version.parse('3.3.0'))),
+        );
+        expect(
+          rule.state[RuleState.stable],
+          equals(Since.dartSdk(Version.parse('2.0.0'))),
+        );
       });
 
       test('throws FormatException when categories is null', () {
