@@ -3,7 +3,9 @@ description: The CLI checks whether a particular version of a lint rule is ident
 version: 1.0.0
 
 environment:
-  sdk: ^3.1.0
+  sdk: ^3.7.2
+
+resolution: workspace
 
 dependencies:
   async: ^2.11.0
@@ -17,8 +19,8 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.7
-  custom_lint: ^0.5.8
-  lints: ^2.0.0
+  custom_lint: ^0.7.5
+  lints: ^5.1.1
   riverpod_generator: ^2.3.9
   riverpod_lint: ^2.3.7
   test: ^1.21.0

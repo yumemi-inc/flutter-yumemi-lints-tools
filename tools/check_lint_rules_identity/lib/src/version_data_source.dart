@@ -5,19 +5,19 @@ import 'package:async/async.dart';
 import 'package:check_lint_rules_identity/src/lint_rules_dir.dart';
 import 'package:check_lint_rules_identity/src/models/lint_type.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'version_data_source.g.dart';
 
 @Riverpod(dependencies: [lintRulesDir])
-DartVersionDataSource dartVersionDataSource(DartVersionDataSourceRef ref) {
+DartVersionDataSource dartVersionDataSource(Ref ref) {
   final dir = ref.watch(lintRulesDirProvider);
   return DartVersionDataSource(lintRulesDir: dir);
 }
 
 @Riverpod(dependencies: [lintRulesDir])
-FlutterVersionDataSource flutterVersionDataSource(
-    FlutterVersionDataSourceRef ref) {
+FlutterVersionDataSource flutterVersionDataSource(Ref ref) {
   final dir = ref.watch(lintRulesDirProvider);
   return FlutterVersionDataSource(lintRulesDir: dir);
 }
@@ -38,7 +38,7 @@ class FlutterVersionDataSource extends VersionDataSource {
 
 abstract class VersionDataSource {
   VersionDataSource({required Directory lintRulesDir})
-      : _lintRulesDir = lintRulesDir;
+    : _lintRulesDir = lintRulesDir;
 
   final Directory _lintRulesDir;
   LintType get type;
@@ -49,13 +49,14 @@ abstract class VersionDataSource {
   final _versionsMemo = AsyncMemoizer<List<Version>>();
 
   Future<List<Version>> readVersions() => _versionsMemo.runOnce(() async {
-        final versions = (await _readVersionDirs())
+    final versions =
+        (await _readVersionDirs())
             .map((e) => parseStringToVersion(e.name))
             .toList()
           ..sort((a, b) => a.compareTo(b));
 
-        return versions;
-      });
+    return versions;
+  });
 
   Future<Iterable<Directory>> _readVersionDirs() =>
       _versionDirsMemo.runOnce(() async {
@@ -63,14 +64,16 @@ abstract class VersionDataSource {
       });
 
   Future<String> readAllYamlAsString(Version version) async {
-    final targetVersionDir = (await _readVersionDirs())
-        .firstWhere((dir) => parseStringToVersion(dir.name) == version);
+    final targetVersionDir = (await _readVersionDirs()).firstWhere(
+      (dir) => parseStringToVersion(dir.name) == version,
+    );
 
     final ls = await targetVersionDir.list().toList();
-    final allYaml = ls
-        .whereType<File>()
-        .where((element) => element.name == 'all.yaml')
-        .first;
+    final allYaml =
+        ls
+            .whereType<File>()
+            .where((element) => element.name == 'all.yaml')
+            .first;
     return allYaml.readAsString();
   }
 

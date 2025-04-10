@@ -1,10 +1,11 @@
 import 'package:http/http.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_client.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [])
-AppClient appClient(AppClientRef ref) {
+AppClient appClient(Ref ref) {
   final appClient = AppClient(Client());
   ref.onDispose(appClient.close);
   return appClient;

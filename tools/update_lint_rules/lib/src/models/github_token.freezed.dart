@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,372 +10,199 @@ part of 'github_token.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
 /// @nodoc
 mixin _$GitHubToken {
-  String get token => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String token) withToken,
-    required TResult Function(String token) withBearerToken,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? withToken,
-    TResult? Function(String token)? withBearerToken,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? withToken,
-    TResult Function(String token)? withBearerToken,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GitHubTokenWithToken value) withToken,
-    required TResult Function(_GitHubTokenWithBearerToken value)
-        withBearerToken,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GitHubTokenWithToken value)? withToken,
-    TResult? Function(_GitHubTokenWithBearerToken value)? withBearerToken,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GitHubTokenWithToken value)? withToken,
-    TResult Function(_GitHubTokenWithBearerToken value)? withBearerToken,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
-  $GitHubTokenCopyWith<GitHubToken> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get token;
+/// Create a copy of GitHubToken
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GitHubTokenCopyWith<GitHubToken> get copyWith => _$GitHubTokenCopyWithImpl<GitHubToken>(this as GitHubToken, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GitHubToken&&(identical(other.token, token) || other.token == token));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,token);
+
+@override
+String toString() {
+  return 'GitHubToken(token: $token)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $GitHubTokenCopyWith<$Res> {
-  factory $GitHubTokenCopyWith(
-          GitHubToken value, $Res Function(GitHubToken) then) =
-      _$GitHubTokenCopyWithImpl<$Res, GitHubToken>;
-  @useResult
-  $Res call({String token});
-}
+abstract mixin class $GitHubTokenCopyWith<$Res>  {
+  factory $GitHubTokenCopyWith(GitHubToken value, $Res Function(GitHubToken) _then) = _$GitHubTokenCopyWithImpl;
+@useResult
+$Res call({
+ String token
+});
 
+
+
+
+}
 /// @nodoc
-class _$GitHubTokenCopyWithImpl<$Res, $Val extends GitHubToken>
+class _$GitHubTokenCopyWithImpl<$Res>
     implements $GitHubTokenCopyWith<$Res> {
-  _$GitHubTokenCopyWithImpl(this._value, this._then);
+  _$GitHubTokenCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final GitHubToken _self;
+  final $Res Function(GitHubToken) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? token = null,
-  }) {
-    return _then(_value.copyWith(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
+/// Create a copy of GitHubToken
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? token = null,}) {
+  return _then(_self.copyWith(
+token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$_GitHubTokenWithTokenCopyWith<$Res>
-    implements $GitHubTokenCopyWith<$Res> {
-  factory _$$_GitHubTokenWithTokenCopyWith(_$_GitHubTokenWithToken value,
-          $Res Function(_$_GitHubTokenWithToken) then) =
-      __$$_GitHubTokenWithTokenCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String token});
 }
 
-/// @nodoc
-class __$$_GitHubTokenWithTokenCopyWithImpl<$Res>
-    extends _$GitHubTokenCopyWithImpl<$Res, _$_GitHubTokenWithToken>
-    implements _$$_GitHubTokenWithTokenCopyWith<$Res> {
-  __$$_GitHubTokenWithTokenCopyWithImpl(_$_GitHubTokenWithToken _value,
-      $Res Function(_$_GitHubTokenWithToken) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? token = null,
-  }) {
-    return _then(_$_GitHubTokenWithToken(
-      null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$_GitHubTokenWithToken extends _GitHubTokenWithToken {
-  const _$_GitHubTokenWithToken(this.token) : super._();
 
-  @override
-  final String token;
+class _GitHubTokenWithToken extends GitHubToken {
+  const _GitHubTokenWithToken(this.token): super._();
+  
 
-  @override
-  String toString() {
-    return 'GitHubToken.withToken(token: $token)';
-  }
+@override final  String token;
 
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_GitHubTokenWithToken &&
-            (identical(other.token, token) || other.token == token));
-  }
+/// Create a copy of GitHubToken
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GitHubTokenWithTokenCopyWith<_GitHubTokenWithToken> get copyWith => __$GitHubTokenWithTokenCopyWithImpl<_GitHubTokenWithToken>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, token);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_GitHubTokenWithTokenCopyWith<_$_GitHubTokenWithToken> get copyWith =>
-      __$$_GitHubTokenWithTokenCopyWithImpl<_$_GitHubTokenWithToken>(
-          this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String token) withToken,
-    required TResult Function(String token) withBearerToken,
-  }) {
-    return withToken(token);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? withToken,
-    TResult? Function(String token)? withBearerToken,
-  }) {
-    return withToken?.call(token);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? withToken,
-    TResult Function(String token)? withBearerToken,
-    required TResult orElse(),
-  }) {
-    if (withToken != null) {
-      return withToken(token);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GitHubTokenWithToken value) withToken,
-    required TResult Function(_GitHubTokenWithBearerToken value)
-        withBearerToken,
-  }) {
-    return withToken(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GitHubTokenWithToken value)? withToken,
-    TResult? Function(_GitHubTokenWithBearerToken value)? withBearerToken,
-  }) {
-    return withToken?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GitHubTokenWithToken value)? withToken,
-    TResult Function(_GitHubTokenWithBearerToken value)? withBearerToken,
-    required TResult orElse(),
-  }) {
-    if (withToken != null) {
-      return withToken(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GitHubTokenWithToken&&(identical(other.token, token) || other.token == token));
 }
 
-abstract class _GitHubTokenWithToken extends GitHubToken {
-  const factory _GitHubTokenWithToken(final String token) =
-      _$_GitHubTokenWithToken;
-  const _GitHubTokenWithToken._() : super._();
 
-  @override
-  String get token;
-  @override
-  @JsonKey(ignore: true)
-  _$$_GitHubTokenWithTokenCopyWith<_$_GitHubTokenWithToken> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,token);
+
+@override
+String toString() {
+  return 'GitHubToken.withToken(token: $token)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$_GitHubTokenWithBearerTokenCopyWith<$Res>
-    implements $GitHubTokenCopyWith<$Res> {
-  factory _$$_GitHubTokenWithBearerTokenCopyWith(
-          _$_GitHubTokenWithBearerToken value,
-          $Res Function(_$_GitHubTokenWithBearerToken) then) =
-      __$$_GitHubTokenWithBearerTokenCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String token});
+abstract mixin class _$GitHubTokenWithTokenCopyWith<$Res> implements $GitHubTokenCopyWith<$Res> {
+  factory _$GitHubTokenWithTokenCopyWith(_GitHubTokenWithToken value, $Res Function(_GitHubTokenWithToken) _then) = __$GitHubTokenWithTokenCopyWithImpl;
+@override @useResult
+$Res call({
+ String token
+});
+
+
+
+
+}
+/// @nodoc
+class __$GitHubTokenWithTokenCopyWithImpl<$Res>
+    implements _$GitHubTokenWithTokenCopyWith<$Res> {
+  __$GitHubTokenWithTokenCopyWithImpl(this._self, this._then);
+
+  final _GitHubTokenWithToken _self;
+  final $Res Function(_GitHubTokenWithToken) _then;
+
+/// Create a copy of GitHubToken
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? token = null,}) {
+  return _then(_GitHubTokenWithToken(
+null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-class __$$_GitHubTokenWithBearerTokenCopyWithImpl<$Res>
-    extends _$GitHubTokenCopyWithImpl<$Res, _$_GitHubTokenWithBearerToken>
-    implements _$$_GitHubTokenWithBearerTokenCopyWith<$Res> {
-  __$$_GitHubTokenWithBearerTokenCopyWithImpl(
-      _$_GitHubTokenWithBearerToken _value,
-      $Res Function(_$_GitHubTokenWithBearerToken) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? token = null,
-  }) {
-    return _then(_$_GitHubTokenWithBearerToken(
-      null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$_GitHubTokenWithBearerToken extends _GitHubTokenWithBearerToken {
-  const _$_GitHubTokenWithBearerToken(this.token) : super._();
 
-  @override
-  final String token;
+class _GitHubTokenWithBearerToken extends GitHubToken {
+  const _GitHubTokenWithBearerToken(this.token): super._();
+  
 
-  @override
-  String toString() {
-    return 'GitHubToken.withBearerToken(token: $token)';
-  }
+@override final  String token;
 
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_GitHubTokenWithBearerToken &&
-            (identical(other.token, token) || other.token == token));
-  }
+/// Create a copy of GitHubToken
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GitHubTokenWithBearerTokenCopyWith<_GitHubTokenWithBearerToken> get copyWith => __$GitHubTokenWithBearerTokenCopyWithImpl<_GitHubTokenWithBearerToken>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, token);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_GitHubTokenWithBearerTokenCopyWith<_$_GitHubTokenWithBearerToken>
-      get copyWith => __$$_GitHubTokenWithBearerTokenCopyWithImpl<
-          _$_GitHubTokenWithBearerToken>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String token) withToken,
-    required TResult Function(String token) withBearerToken,
-  }) {
-    return withBearerToken(token);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? withToken,
-    TResult? Function(String token)? withBearerToken,
-  }) {
-    return withBearerToken?.call(token);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? withToken,
-    TResult Function(String token)? withBearerToken,
-    required TResult orElse(),
-  }) {
-    if (withBearerToken != null) {
-      return withBearerToken(token);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GitHubTokenWithToken value) withToken,
-    required TResult Function(_GitHubTokenWithBearerToken value)
-        withBearerToken,
-  }) {
-    return withBearerToken(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GitHubTokenWithToken value)? withToken,
-    TResult? Function(_GitHubTokenWithBearerToken value)? withBearerToken,
-  }) {
-    return withBearerToken?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GitHubTokenWithToken value)? withToken,
-    TResult Function(_GitHubTokenWithBearerToken value)? withBearerToken,
-    required TResult orElse(),
-  }) {
-    if (withBearerToken != null) {
-      return withBearerToken(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GitHubTokenWithBearerToken&&(identical(other.token, token) || other.token == token));
 }
 
-abstract class _GitHubTokenWithBearerToken extends GitHubToken {
-  const factory _GitHubTokenWithBearerToken(final String token) =
-      _$_GitHubTokenWithBearerToken;
-  const _GitHubTokenWithBearerToken._() : super._();
 
-  @override
-  String get token;
-  @override
-  @JsonKey(ignore: true)
-  _$$_GitHubTokenWithBearerTokenCopyWith<_$_GitHubTokenWithBearerToken>
-      get copyWith => throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,token);
+
+@override
+String toString() {
+  return 'GitHubToken.withBearerToken(token: $token)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GitHubTokenWithBearerTokenCopyWith<$Res> implements $GitHubTokenCopyWith<$Res> {
+  factory _$GitHubTokenWithBearerTokenCopyWith(_GitHubTokenWithBearerToken value, $Res Function(_GitHubTokenWithBearerToken) _then) = __$GitHubTokenWithBearerTokenCopyWithImpl;
+@override @useResult
+$Res call({
+ String token
+});
+
+
+
+
+}
+/// @nodoc
+class __$GitHubTokenWithBearerTokenCopyWithImpl<$Res>
+    implements _$GitHubTokenWithBearerTokenCopyWith<$Res> {
+  __$GitHubTokenWithBearerTokenCopyWithImpl(this._self, this._then);
+
+  final _GitHubTokenWithBearerToken _self;
+  final $Res Function(_GitHubTokenWithBearerToken) _then;
+
+/// Create a copy of GitHubToken
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? token = null,}) {
+  return _then(_GitHubTokenWithBearerToken(
+null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on
