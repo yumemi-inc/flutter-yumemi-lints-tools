@@ -105,7 +105,7 @@ class LintCodeDtoMapper {
     final rulesWithoutSharedName =
         LintCodeDtoMapper.filterLintCodeDtosBySharedName(
           dtos,
-        ).map(LintCodeDtoMapper.toRule);
+        ).map((d) => LintCodeDtoMapper.toRule(d));
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
 
