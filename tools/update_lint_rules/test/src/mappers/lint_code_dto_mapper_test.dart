@@ -217,8 +217,10 @@ void main() {
         expect(rule.name, equals('test_shared_name'));
         expect(rule.categories, equals(['style']));
         expect(rule.details, equals('test_details_2'));
-        expect(rule.state[RuleState.removed],
-            equals(Since.dartSdk(Version.parse('3.3.0'))));
+        expect(
+          rule.state[RuleState.removed],
+          equals(Since.dartSdk(Version.parse('3.3.0'))),
+        );
       });
 
       test('throws ArgumentError when dto names do not match sharedName', () {

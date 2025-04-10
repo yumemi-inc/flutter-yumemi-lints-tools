@@ -20,11 +20,7 @@ class LintCodeDtoMapper {
 
     if (categories == null || details == null || state == null) {
       throw FormatException(
-        'Required fields are null: ${[
-          if (categories == null) 'categories',
-          if (details == null) 'details',
-          if (state == null) 'state',
-        ].join(', ')}',
+        'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
       );
     }
 
@@ -33,10 +29,8 @@ class LintCodeDtoMapper {
       categories: categories,
       details: details,
       state: state.map(
-        (key, value) => MapEntry(
-          RuleState.values.byName(key),
-          Since.fromJson(value),
-        ),
+        (key, value) =>
+            MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
       ),
     );
   }
@@ -58,11 +52,7 @@ class LintCodeDtoMapper {
 
     if (categories == null || details == null || state == null) {
       throw FormatException(
-        'Required fields are null: ${[
-          if (categories == null) 'categories',
-          if (details == null) 'details',
-          if (state == null) 'state',
-        ].join(', ')}',
+        'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
       );
     }
 
@@ -71,10 +61,8 @@ class LintCodeDtoMapper {
       categories: categories,
       details: details,
       state: state.map(
-        (key, value) => MapEntry(
-          RuleState.values.byName(key),
-          Since.fromJson(value),
-        ),
+        (key, value) =>
+            MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
       ),
     );
   }
