@@ -20,7 +20,7 @@ abstract class Rule with _$Rule {
     required String name,
     required List<String> categories,
     @JsonKey(name: 'deprecatedDetails') required String details,
-    @_StateJsonConverter() required State state,
+    @_StateJsonConverter() required Map<RuleState, Since> state,
   }) = _Rule;
 
   factory Rule.fromJson(Map<String, dynamic> json) => _$RuleFromJson(json);

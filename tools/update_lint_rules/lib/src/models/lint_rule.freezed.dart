@@ -236,7 +236,7 @@ $RuleCopyWith<$Res> get rule {
 /// @nodoc
 mixin _$Rule {
 
- String get name; List<String> get categories;@JsonKey(name: 'deprecatedDetails') String get details;@_StateJsonConverter() State get state;
+ String get name; List<String> get categories;@JsonKey(name: 'deprecatedDetails') String get details;@_StateJsonConverter() Map<RuleState, Since> get state;
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -291,7 +291,7 @@ class _$RuleCopyWithImpl<$Res>
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
 as List<String>,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
-as String,state: null == state ? _self.state! : state // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as Map<RuleState, Since>,
   ));
 }
