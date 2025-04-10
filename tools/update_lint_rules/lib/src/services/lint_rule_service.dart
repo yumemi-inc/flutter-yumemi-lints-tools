@@ -145,27 +145,7 @@ class LintRuleService {
       return LintCodeDto.fromJson(rule);
     });
 
-    // Group DTOs by sharedName
-    final groupedLintCodeDtosBySharedName =
-        LintCodeDtoMapper.groupLintCodeDtosBySharedName(codeDtos.toList());
-
-    // Convert DTOs with sharedName to Rules
-    final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map(
-      (e) => LintCodeDtoMapper.toRuleFromDtos(sharedName: e.key, dtos: e.value),
-    );
-
-    // Convert DTOs without sharedName to Rules
-    final rulesWithoutSharedName =
-        LintCodeDtoMapper.filterLintCodeDtosBySharedName(
-          codeDtos,
-        ).map(LintCodeDtoMapper.toRule);
-
-    final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
-
-    // Filter out inactive rules and sort by name
-    return allRules
-        .where((r) => r.state.keys.map((e) => e.active).contains(true))
-        .sorted((a, b) => a.name.compareTo(b.name));
+    return LintCodeDtoMapper.toRules(codeDtos);
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {

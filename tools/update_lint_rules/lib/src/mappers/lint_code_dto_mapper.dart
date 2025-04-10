@@ -89,4 +89,29 @@ class LintCodeDtoMapper {
       ),
     );
   }
+
+  /// Convert a list of [LintCodeDto] to a list of [Rule]
+  static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
+    // Group DTOs by sharedName
+    final groupedLintCodeDtosBySharedName =
+        LintCodeDtoMapper.groupLintCodeDtosBySharedName(dtos.toList());
+
+    // Convert DTOs with sharedName to Rules
+    final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map(
+      (e) => LintCodeDtoMapper.toRuleFromDtos(sharedName: e.key, dtos: e.value),
+    );
+
+    // Convert DTOs without sharedName to Rules
+    final rulesWithoutSharedName =
+        LintCodeDtoMapper.filterLintCodeDtosBySharedName(
+          dtos,
+        ).map(LintCodeDtoMapper.toRule);
+
+    final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
+
+    // Filter out inactive rules and sort by name
+    return allRules
+        .where((r) => r.state.keys.map((e) => e.active).contains(true))
+        .sorted((a, b) => a.name.compareTo(b.name));
+  }
 }
