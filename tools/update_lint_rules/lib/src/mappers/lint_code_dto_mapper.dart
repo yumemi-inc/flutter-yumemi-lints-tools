@@ -5,13 +5,6 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 class LintCodeDtoMapper {
   const LintCodeDtoMapper._();
 
-  /// Check if the [LintCodeDto] can be converted to a [Rule]
-  static bool canConvertToRule(LintCodeDto dto) {
-    return dto.categories != null &&
-        dto.deprecatedDetails != null &&
-        dto.state != null;
-  }
-
   // Group DTOs by sharedName
   static Map<String, List<LintCodeDto>> groupLintCodeDtosBySharedName(
     List<LintCodeDto> dtos,
@@ -19,7 +12,10 @@ class LintCodeDtoMapper {
     return dtos
         .where(
           (dto) =>
-              dto.sharedName != null && LintCodeDtoMapper.canConvertToRule(dto),
+              dto.sharedName != null &&
+              dto.categories != null &&
+              dto.deprecatedDetails != null &&
+              dto.state != null,
         )
         // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
         // So, group by `dto.name`.
@@ -32,7 +28,10 @@ class LintCodeDtoMapper {
   ) {
     return dtos.where(
       (dto) =>
-          dto.sharedName == null && LintCodeDtoMapper.canConvertToRule(dto),
+          dto.sharedName == null &&
+          dto.categories != null &&
+          dto.deprecatedDetails != null &&
+          dto.state != null,
     );
   }
 
