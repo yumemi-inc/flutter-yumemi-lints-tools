@@ -28,38 +28,6 @@ class LintCodeDtoMapper {
     );
   }
 
-  /// Convert a list of [LintCodeDto] to [Rule]
-  static Rule toRuleFromDtos({
-    required String sharedName,
-    required List<LintCodeDto> dtos,
-  }) {
-    if (dtos.any((dto) => dto.sharedName != sharedName)) {
-      throw ArgumentError(
-        'All LintCodeDto objects must have the same name: $sharedName',
-      );
-    }
-
-    final categories = dtos.map((e) => e.categories).nonNulls.firstOrNull;
-    final details = dtos.map((e) => e.deprecatedDetails).nonNulls.firstOrNull;
-    final state = dtos.map((e) => e.state).nonNulls.firstOrNull;
-
-    if (categories == null || details == null || state == null) {
-      throw FormatException(
-        'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
-      );
-    }
-
-    return Rule(
-      name: sharedName,
-      categories: categories,
-      details: details,
-      state: state.map(
-        (key, value) =>
-            MapEntry(RuleState.values.byName(key), Since.fromJson(value)),
-      ),
-    );
-  }
-
   /// Convert a list of [LintCodeDto] to a list of [Rule]
   static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
     // Group DTOs by sharedName
@@ -70,9 +38,25 @@ class LintCodeDtoMapper {
         .groupListsBy((dto) => dto.name);
 
     // Convert DTOs with sharedName to Rules
-    final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map(
-      (e) => LintCodeDtoMapper.toRuleFromDtos(sharedName: e.key, dtos: e.value),
-    );
+    final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map((
+      e,
+    ) {
+      final dtos = e.value;
+
+      final categories = dtos.map((e) => e.categories).nonNulls.firstOrNull;
+      final deprecatedDetails =
+          dtos.map((e) => e.deprecatedDetails).nonNulls.firstOrNull;
+      final state = dtos.map((e) => e.state).nonNulls.firstOrNull;
+
+      return LintCodeDtoMapper.toRule(
+        dtos.first.copyWith(
+          name: e.key,
+          categories: categories,
+          deprecatedDetails: deprecatedDetails,
+          state: state,
+        ),
+      );
+    });
 
     // Convert DTOs without sharedName to Rules
     final rulesWithoutSharedName = dtos
