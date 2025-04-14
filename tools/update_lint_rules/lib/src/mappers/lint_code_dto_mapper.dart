@@ -5,36 +5,6 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 class LintCodeDtoMapper {
   const LintCodeDtoMapper._();
 
-  // Group DTOs by sharedName
-  static Map<String, List<LintCodeDto>> groupLintCodeDtosBySharedName(
-    List<LintCodeDto> dtos,
-  ) {
-    return dtos
-        .where(
-          (dto) =>
-              dto.sharedName != null &&
-              dto.categories != null &&
-              dto.deprecatedDetails != null &&
-              dto.state != null,
-        )
-        // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
-        // So, group by `dto.name`.
-        .groupListsBy((dto) => dto.name);
-  }
-
-  /// Filter [LintCodeDto] by sharedName
-  static Iterable<LintCodeDto> filterLintCodeDtosBySharedName(
-    Iterable<LintCodeDto> dtos,
-  ) {
-    return dtos.where(
-      (dto) =>
-          dto.sharedName == null &&
-          dto.categories != null &&
-          dto.deprecatedDetails != null &&
-          dto.state != null,
-    );
-  }
-
   /// Convert [LintCodeDto] to [Rule]
   static Rule toRule(LintCodeDto dto) {
     final categories = dto.categories;
@@ -93,8 +63,17 @@ class LintCodeDtoMapper {
   /// Convert a list of [LintCodeDto] to a list of [Rule]
   static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
     // Group DTOs by sharedName
-    final groupedLintCodeDtosBySharedName =
-        LintCodeDtoMapper.groupLintCodeDtosBySharedName(dtos.toList());
+    final groupedLintCodeDtosBySharedName = dtos
+        .where(
+          (dto) =>
+              dto.sharedName != null &&
+              dto.categories != null &&
+              dto.deprecatedDetails != null &&
+              dto.state != null,
+        )
+        // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
+        // So, group by `dto.name`.
+        .groupListsBy((dto) => dto.name);
 
     // Convert DTOs with sharedName to Rules
     final rulesWithSharedName = groupedLintCodeDtosBySharedName.entries.map(
@@ -102,10 +81,15 @@ class LintCodeDtoMapper {
     );
 
     // Convert DTOs without sharedName to Rules
-    final rulesWithoutSharedName =
-        LintCodeDtoMapper.filterLintCodeDtosBySharedName(
-          dtos,
-        ).map((d) => LintCodeDtoMapper.toRule(d));
+    final rulesWithoutSharedName = dtos
+        .where(
+          (dto) =>
+              dto.sharedName == null &&
+              dto.categories != null &&
+              dto.deprecatedDetails != null &&
+              dto.state != null,
+        )
+        .map((dto) => LintCodeDtoMapper.toRule(dto));
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
 
