@@ -149,10 +149,7 @@ class LintRuleService {
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
-    final containsFlutterOnlyRules =
-        _isNotFlutterOnlyRules.where((e) => e.contains(rule.name)).isNotEmpty;
-
-    if (containsFlutterOnlyRules) {
+    if (_isNotFlutterOnlyRules.contains(rule.name)) {
       return false;
     }
 
