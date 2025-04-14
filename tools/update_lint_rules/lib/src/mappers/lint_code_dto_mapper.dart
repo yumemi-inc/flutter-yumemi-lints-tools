@@ -13,7 +13,7 @@ class LintCodeDtoMapper {
 
     if (categories == null || details == null || state == null) {
       throw FormatException(
-        'Required fields are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
+        'Required fields ${dto.name} are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
       );
     }
 
@@ -64,13 +64,7 @@ class LintCodeDtoMapper {
   static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
     // Group DTOs by sharedName
     final groupedLintCodeDtosBySharedName = dtos
-        .where(
-          (dto) =>
-              dto.sharedName != null &&
-              dto.categories != null &&
-              dto.deprecatedDetails != null &&
-              dto.state != null,
-        )
+        .where((dto) => dto.sharedName != null)
         // If `dto.sharedName` is not null, `dto.name` is the same as `dto.sharedName`.
         // So, group by `dto.name`.
         .groupListsBy((dto) => dto.name);
