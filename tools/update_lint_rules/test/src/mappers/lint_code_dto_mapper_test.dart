@@ -7,13 +7,13 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 void main() {
   group('LintCodeDtoMapper', () {
     group('toRule', () {
-      test('converts valid LintCodeDto to Rule', () {
+      test('converts valid dto to rule', () {
         final dto = LintCodeDto(
           name: 'test_name',
-          sharedName: 'test_shared_name',
+          sharedName: null,
           problemMessage: 'test_message',
           correctionMessage: 'test_correction',
-          state: {'removed': '3.3', 'stable': '2.0'},
+          state: {'stable': '2.0'},
           categories: ['style'],
           hasPublishedDocs: true,
           documentation: 'test_documentation',
@@ -27,10 +27,6 @@ void main() {
         expect(rule.categories, equals(['style']));
         expect(rule.details, equals('test_details'));
         expect(
-          rule.state[RuleState.removed],
-          equals(Since.dartSdk(Version.parse('3.3.0'))),
-        );
-        expect(
           rule.state[RuleState.stable],
           equals(Since.dartSdk(Version.parse('2.0.0'))),
         );
@@ -39,10 +35,10 @@ void main() {
       test('throws FormatException when categories is null', () {
         final dto = LintCodeDto(
           name: 'test_name',
-          sharedName: 'test_shared_name',
+          sharedName: null,
           problemMessage: 'test_message',
           correctionMessage: 'test_correction',
-          state: {'removed': '3.3', 'stable': '2.0'},
+          state: {'stable': '2.0'},
           categories: null,
           hasPublishedDocs: true,
           documentation: 'test_documentation',
@@ -50,16 +46,19 @@ void main() {
           todo: 'test_todo',
         );
 
-        expect(() => LintCodeDtoMapper.toRule(dto), throwsFormatException);
+        expect(
+          () => LintCodeDtoMapper.toRule(dto),
+          throwsA(isA<FormatException>()),
+        );
       });
 
       test('throws FormatException when details is null', () {
         final dto = LintCodeDto(
           name: 'test_name',
-          sharedName: 'test_shared_name',
+          sharedName: null,
           problemMessage: 'test_message',
           correctionMessage: 'test_correction',
-          state: {'removed': '3.3', 'stable': '2.0'},
+          state: {'stable': '2.0'},
           categories: ['style'],
           hasPublishedDocs: true,
           documentation: 'test_documentation',
@@ -67,13 +66,16 @@ void main() {
           todo: 'test_todo',
         );
 
-        expect(() => LintCodeDtoMapper.toRule(dto), throwsFormatException);
+        expect(
+          () => LintCodeDtoMapper.toRule(dto),
+          throwsA(isA<FormatException>()),
+        );
       });
 
       test('throws FormatException when state is null', () {
         final dto = LintCodeDto(
           name: 'test_name',
-          sharedName: 'test_shared_name',
+          sharedName: null,
           problemMessage: 'test_message',
           correctionMessage: 'test_correction',
           state: null,
@@ -84,192 +86,179 @@ void main() {
           todo: 'test_todo',
         );
 
-        expect(() => LintCodeDtoMapper.toRule(dto), throwsFormatException);
+        expect(
+          () => LintCodeDtoMapper.toRule(dto),
+          throwsA(isA<FormatException>()),
+        );
       });
 
-      test('throws FormatException when multiple fields are null', () {
+      test('converts rule with multiple state entries', () {
         final dto = LintCodeDto(
           name: 'test_name',
           sharedName: null,
-          problemMessage: null,
-          correctionMessage: null,
-          state: null,
-          categories: null,
+          problemMessage: 'test_message',
+          correctionMessage: 'test_correction',
+          state: {'stable': '2.0', 'deprecated': '2.0'},
+          categories: ['style'],
           hasPublishedDocs: true,
-          documentation: null,
-          deprecatedDetails: null,
-          todo: null,
+          documentation: 'test_documentation',
+          deprecatedDetails: 'test_details',
+          todo: 'test_todo',
         );
 
-        expect(() => LintCodeDtoMapper.toRule(dto), throwsFormatException);
+        final rule = LintCodeDtoMapper.toRule(dto);
+
+        expect(
+          rule.state[RuleState.stable],
+          equals(Since.dartSdk(Version.parse('2.0.0'))),
+        );
+        expect(
+          rule.state[RuleState.deprecated],
+          equals(Since.dartSdk(Version.parse('2.0.0'))),
+        );
       });
     });
-
-    group('toRuleFromDtos', () {
-      test('converts list of LintCodeDtos to a single Rule', () {
+    group('toRules', () {
+      test('converts list of dtos to sorted list of rules', () {
         final dtos = [
           LintCodeDto(
-            name: 'test_name_1',
-            sharedName: 'test_shared_name',
-            problemMessage: 'test_message_1',
-            correctionMessage: 'test_correction_1',
+            name: 'b_name',
+            sharedName: null,
+            problemMessage: 'test_message',
+            correctionMessage: 'test_correction',
+            state: {'stable': '2.0'},
             categories: ['style'],
             hasPublishedDocs: true,
-            documentation: 'test_documentation_1',
-            deprecatedDetails: null,
-            todo: 'test_todo_1',
-            state: null,
+            documentation: 'test_documentation',
+            deprecatedDetails: 'test_details',
+            todo: 'test_todo',
           ),
           LintCodeDto(
-            name: 'test_name_2',
-            sharedName: 'test_shared_name',
-            problemMessage: 'test_message_2',
-            correctionMessage: 'test_correction_2',
-            categories: null,
+            name: 'a_name',
+            sharedName: null,
+            problemMessage: 'test_message',
+            correctionMessage: 'test_correction',
+            state: {'stable': '2.0'},
+            categories: ['style'],
             hasPublishedDocs: true,
-            documentation: 'test_documentation_2',
-            deprecatedDetails: 'test_details_2',
-            todo: 'test_todo_2',
-            state: null,
-          ),
-          LintCodeDto(
-            name: 'test_name_3',
-            sharedName: 'test_shared_name',
-            problemMessage: 'test_message_3',
-            correctionMessage: 'test_correction_3',
-            categories: null,
-            hasPublishedDocs: true,
-            documentation: 'test_documentation_3',
-            deprecatedDetails: null,
-            todo: 'test_todo_3',
-            state: {'removed': '3.3'},
+            documentation: 'test_documentation',
+            deprecatedDetails: 'test_details',
+            todo: 'test_todo',
           ),
         ];
 
-        final rule = LintCodeDtoMapper.toRuleFromDtos(
-          sharedName: 'test_shared_name',
-          dtos: dtos,
-        );
+        final rules = LintCodeDtoMapper.toRules(dtos);
 
-        expect(rule.name, equals('test_shared_name'));
-        expect(rule.categories, equals(['style']));
-        expect(rule.details, equals('test_details_2'));
-        expect(
-          rule.state[RuleState.removed],
-          equals(Since.dartSdk(Version.parse('3.3.0'))),
-        );
+        expect(rules.length, equals(2));
+        expect(rules[0].name, equals('a_name'));
+        expect(rules[1].name, equals('b_name'));
       });
 
-      test('throws ArgumentError when dto names do not match sharedName', () {
+      test('groups dtos with same sharedName', () {
         final dtos = [
           LintCodeDto(
-            name: 'test_name_1',
-            sharedName: 'shared_name',
+            name: 'shared_rule',
+            sharedName: 'shared_rule',
             problemMessage: 'test_message_1',
             correctionMessage: 'test_correction_1',
+            state: {'stable': '2.0'},
             categories: ['style'],
             hasPublishedDocs: true,
             documentation: 'test_documentation_1',
             deprecatedDetails: 'test_details_1',
             todo: 'test_todo_1',
-            state: {'state': '2.0'},
           ),
           LintCodeDto(
-            name: 'test_name_2',
-            sharedName: 'different_rule',
+            name: 'shared_rule',
+            sharedName: 'shared_rule',
             problemMessage: 'test_message_2',
             correctionMessage: 'test_correction_2',
-            categories: ['style'],
+            state: {'deprecated': '2.0'},
+            categories: null,
             hasPublishedDocs: true,
             documentation: 'test_documentation_2',
-            deprecatedDetails: 'test_details_2',
+            deprecatedDetails: null,
             todo: 'test_todo_2',
-            state: {'state': '3.0'},
           ),
         ];
 
+        final rules = LintCodeDtoMapper.toRules(dtos);
+
+        expect(rules.length, equals(1));
+
+        final rule = rules.first;
+        expect(rule.name, equals('shared_rule'));
+        expect(rule.categories, equals(['style']));
+        expect(rule.details, equals('test_details_1'));
         expect(
-          () => LintCodeDtoMapper.toRuleFromDtos(
-            sharedName: 'test_name',
-            dtos: dtos,
-          ),
-          throwsArgumentError,
+          rule.state[RuleState.stable],
+          equals(Since.dartSdk(Version.parse('2.0.0'))),
         );
       });
 
-      test('throws FormatException when no dto has categories', () {
+      test('filters out dtos with null state and null sharedName', () {
         final dtos = [
           LintCodeDto(
-            name: 'test_name',
-            sharedName: 'test_shared_name',
+            name: 'valid_rule',
+            sharedName: null,
             problemMessage: 'test_message',
             correctionMessage: 'test_correction',
-            categories: null,
+            state: {'stable': '2.0'},
+            categories: ['style'],
             hasPublishedDocs: true,
             documentation: 'test_documentation',
             deprecatedDetails: 'test_details',
             todo: 'test_todo',
-            state: {'state': '2.0'},
+          ),
+          LintCodeDto(
+            name: 'invalid_rule',
+            sharedName: null,
+            problemMessage: 'test_message',
+            correctionMessage: 'test_correction',
+            state: null,
+            categories: ['style'],
+            hasPublishedDocs: true,
+            documentation: 'test_documentation',
+            deprecatedDetails: 'test_details',
+            todo: 'test_todo',
           ),
         ];
 
-        expect(
-          () => LintCodeDtoMapper.toRuleFromDtos(
-            sharedName: 'test_shared_name',
-            dtos: dtos,
-          ),
-          throwsFormatException,
-        );
+        final rules = LintCodeDtoMapper.toRules(dtos);
+
+        expect(rules.length, equals(1));
+        expect(rules[0].name, equals('valid_rule'));
       });
 
-      test('throws FormatException when no dto has details', () {
+      test('handles empty dtos list', () {
+        final rules = LintCodeDtoMapper.toRules([]);
+
+        expect(rules, isEmpty);
+      });
+
+      test('uses default values for null categories and details', () {
         final dtos = [
           LintCodeDto(
             name: 'test_name',
-            sharedName: 'test_shared_name',
+            sharedName: null,
             problemMessage: 'test_message',
             correctionMessage: 'test_correction',
-            categories: ['style'],
+            state: {'stable': '2.0'},
+            categories: null,
             hasPublishedDocs: true,
             documentation: 'test_documentation',
             deprecatedDetails: null,
             todo: 'test_todo',
-            state: {'state': '2.0'},
           ),
         ];
 
-        expect(
-          () => LintCodeDtoMapper.toRuleFromDtos(
-            sharedName: 'test_shared_name',
-            dtos: dtos,
-          ),
-          throwsFormatException,
-        );
-      });
+        final rules = LintCodeDtoMapper.toRules(dtos);
 
-      test('throws FormatException when no dto has state', () {
-        final dtos = [
-          LintCodeDto(
-            name: 'test_name',
-            sharedName: 'test_shared_name',
-            problemMessage: 'test_message',
-            correctionMessage: 'test_correction',
-            categories: ['style'],
-            hasPublishedDocs: true,
-            documentation: 'test_documentation',
-            deprecatedDetails: 'test_details',
-            todo: 'test_todo',
-            state: null,
-          ),
-        ];
+        expect(rules.length, equals(1));
 
-        expect(
-          () => LintCodeDtoMapper.toRuleFromDtos(
-            sharedName: 'test_shared_name',
-            dtos: dtos,
-          ),
-          throwsFormatException,
-        );
+        final rule = rules.first;
+        expect(rule.categories, equals([]));
+        expect(rule.details, equals(''));
       });
     });
   });
