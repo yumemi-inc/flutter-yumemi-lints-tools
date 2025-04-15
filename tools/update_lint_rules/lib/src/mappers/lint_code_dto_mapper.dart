@@ -60,14 +60,16 @@ class LintCodeDtoMapper {
 
     // Convert DTOs without sharedName to Rules
     final rulesWithoutSharedName = dtos
-        .where(
-          (dto) =>
-              dto.sharedName == null &&
-              dto.categories != null &&
-              dto.deprecatedDetails != null &&
-              dto.state != null,
-        )
-        .map((dto) => LintCodeDtoMapper.toRule(dto));
+        // Filter out DTOs with sharedName and null state
+        .where((dto) => dto.sharedName == null && dto.state != null)
+        .map(
+          (dto) => LintCodeDtoMapper.toRule(
+            dto.copyWith(
+              categories: dto.categories ?? const [],
+              deprecatedDetails: dto.deprecatedDetails ?? '',
+            ),
+          ),
+        );
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
     // Filter out inactive rules and sort by name
