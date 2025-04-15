@@ -14,19 +14,23 @@ import 'package:update_lint_rules/src/output_dir.dart';
 part 'analysis_options_service.g.dart';
 
 extension ExtState on State {
-  bool hasMinimumVersion(Version version) {
-    return entries.where((e) {
-      if (e.key.inactive) {
-        return false;
-      }
-
+  /// Check if the state has a supported version.
+  bool hasSupportedVersion(Version version) {
+    // Check if the version is supported by this state
+    final supportedVersions = entries.where((e) {
       final since = e.value;
       if (since is! SinceDartSdk) {
         return false;
       }
+      final sinceVersion = since.version;
 
-      return since.version <= version;
-    }).isNotEmpty;
+      final isActive = e.key.active && sinceVersion >= version;
+      final isInactive = e.key.inactive && sinceVersion <= version;
+
+      return isActive || isInactive;
+    });
+
+    return supportedVersions.isEmpty;
   }
 }
 
@@ -51,14 +55,14 @@ class AnalysisOptionsService {
     final futures = releases.map((release) async {
       final dartSdkVersion = release.version;
       final allLintRules = lintRules.where(
-        (lintRule) => lintRule.rule.state.hasMinimumVersion(dartSdkVersion),
+        (lintRule) => lintRule.rule.state.hasSupportedVersion(dartSdkVersion),
       );
 
       final filteredNotRecommendedRules = notRecommendedRules.where(
-        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
       );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
       );
 
       final dartOutputDir = _outputDir.childDirectory(
@@ -94,13 +98,13 @@ class AnalysisOptionsService {
       final flutterSdkVersion = release.version;
       final dartSdkVersion = release.dartSdkVersion;
       final allLintRules = lintRules.where(
-        (lintRule) => lintRule.rule.state.hasMinimumVersion(dartSdkVersion),
+        (lintRule) => lintRule.rule.state.hasSupportedVersion(dartSdkVersion),
       );
       final filteredNotRecommendedRules = notRecommendedRules.where(
-        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
       );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) => r.rule.state.hasMinimumVersion(dartSdkVersion),
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
       );
 
       final flutterOutputDir = _outputDir.childDirectory(
