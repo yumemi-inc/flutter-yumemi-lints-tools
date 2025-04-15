@@ -84,6 +84,27 @@ sealed class Since with _$Since {
 
 typedef State = Map<RuleState, Since>;
 
+extension ExtState on State {
+  /// Check if the state has a supported version.
+  bool hasSupportedVersion(Version version) {
+    // Check if the version is supported by this state
+    final supportedVersions = entries.where((e) {
+      final since = e.value;
+      if (since is! SinceDartSdk) {
+        return false;
+      }
+      final sinceVersion = since.version;
+
+      final isActive = e.key.active && sinceVersion >= version;
+      final isInactive = e.key.inactive && sinceVersion <= version;
+
+      return isActive || isInactive;
+    });
+
+    return supportedVersions.isEmpty;
+  }
+}
+
 class _StateJsonConverter
     implements JsonConverter<State, Map<String, dynamic>> {
   const _StateJsonConverter();

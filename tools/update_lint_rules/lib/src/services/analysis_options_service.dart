@@ -2,7 +2,6 @@ import 'package:file/file.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:pub_semver/pub_semver.dart';
 import 'package:update_lint_rules/src/extension/version_ext.dart';
 import 'package:update_lint_rules/src/models/dart_sdk_release.dart';
 import 'package:update_lint_rules/src/models/flutter_sdk_release.dart';
@@ -12,27 +11,6 @@ import 'package:update_lint_rules/src/models/recommended_rule_severity.dart';
 import 'package:update_lint_rules/src/output_dir.dart';
 
 part 'analysis_options_service.g.dart';
-
-extension ExtState on State {
-  /// Check if the state has a supported version.
-  bool hasSupportedVersion(Version version) {
-    // Check if the version is supported by this state
-    final supportedVersions = entries.where((e) {
-      final since = e.value;
-      if (since is! SinceDartSdk) {
-        return false;
-      }
-      final sinceVersion = since.version;
-
-      final isActive = e.key.active && sinceVersion >= version;
-      final isInactive = e.key.inactive && sinceVersion <= version;
-
-      return isActive || isInactive;
-    });
-
-    return supportedVersions.isEmpty;
-  }
-}
 
 @Riverpod(dependencies: [outputDir])
 AnalysisOptionsService analysisOptionsService(Ref ref) {
