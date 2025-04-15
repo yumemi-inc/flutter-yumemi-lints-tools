@@ -6,21 +6,25 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 class LintCodeDtoMapper {
   const LintCodeDtoMapper._();
 
-  /// Convert [LintCodeDto] to [Rule]
+  /// Builds a [Rule] instance from provided parameters.
+  ///
+  /// If any of the required parameters categories, details, or state
+  /// is null. The [FormatException] message includes which fields are missing.
   @visibleForTesting
-  static Rule toRule(LintCodeDto dto) {
-    final categories = dto.categories;
-    final details = dto.deprecatedDetails;
-    final state = dto.state;
-
+  static Rule buildRule({
+    required String name,
+    List<String>? categories,
+    String? details,
+    Map<String, dynamic>? state,
+  }) {
     if (categories == null || details == null || state == null) {
       throw FormatException(
-        'Required fields ${dto.name} are null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
+        'The required field for the $name is null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
       );
     }
 
     return Rule(
-      name: dto.name,
+      name: name,
       categories: categories,
       details: details,
       state: state.map(
@@ -50,13 +54,11 @@ class LintCodeDtoMapper {
           dtos.map((e) => e.deprecatedDetails).nonNulls.firstOrNull;
       final state = dtos.map((e) => e.state).nonNulls.firstOrNull;
 
-      return LintCodeDtoMapper.toRule(
-        dtos.first.copyWith(
-          name: e.key,
-          categories: categories,
-          deprecatedDetails: deprecatedDetails,
-          state: state,
-        ),
+      return LintCodeDtoMapper.buildRule(
+        name: e.key,
+        categories: categories,
+        details: deprecatedDetails,
+        state: state,
       );
     });
 
@@ -64,11 +66,11 @@ class LintCodeDtoMapper {
     final rulesWithoutSharedName = dtos
         .where((dto) => dto.sharedName == null)
         .map(
-          (dto) => LintCodeDtoMapper.toRule(
-            dto.copyWith(
-              categories: dto.categories ?? const [],
-              deprecatedDetails: dto.deprecatedDetails ?? '',
-            ),
+          (dto) => LintCodeDtoMapper.buildRule(
+            name: dto.name,
+            categories: dto.categories ?? const [],
+            details: dto.deprecatedDetails,
+            state: dto.state,
           ),
         );
 
