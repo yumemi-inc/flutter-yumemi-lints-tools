@@ -62,8 +62,7 @@ class LintCodeDtoMapper {
 
     // Convert DTOs without sharedName to Rules
     final rulesWithoutSharedName = dtos
-        // Filter out DTOs with sharedName and null state
-        .where((dto) => dto.sharedName == null && dto.state != null)
+        .where((dto) => dto.sharedName == null)
         .map(
           (dto) => LintCodeDtoMapper.toRule(
             dto.copyWith(
