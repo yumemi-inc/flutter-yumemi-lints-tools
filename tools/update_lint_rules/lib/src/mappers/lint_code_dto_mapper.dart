@@ -31,7 +31,6 @@ class LintCodeDtoMapper {
   }
 
   /// Convert a list of [LintCodeDto] to a list of [Rule]
-  @visibleForTesting
   static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
     // Group DTOs by sharedName
     final groupedLintCodeDtosBySharedName = dtos
