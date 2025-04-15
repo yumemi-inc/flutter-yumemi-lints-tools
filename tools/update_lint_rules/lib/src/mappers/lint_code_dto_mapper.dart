@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:update_lint_rules/src/models/lint_code_dto.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 
@@ -6,6 +7,7 @@ class LintCodeDtoMapper {
   const LintCodeDtoMapper._();
 
   /// Convert [LintCodeDto] to [Rule]
+  @visibleForTesting
   static Rule toRule(LintCodeDto dto) {
     final categories = dto.categories;
     final details = dto.deprecatedDetails;
@@ -29,6 +31,7 @@ class LintCodeDtoMapper {
   }
 
   /// Convert a list of [LintCodeDto] to a list of [Rule]
+  @visibleForTesting
   static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
     // Group DTOs by sharedName
     final groupedLintCodeDtosBySharedName = dtos
