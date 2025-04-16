@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:update_lint_rules/src/models/lint_code_dto.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 
-class LintCodeDtoMapper {
-  const LintCodeDtoMapper._();
+class RuleMapper {
+  const RuleMapper._();
 
   /// Builds a [Rule] instance from provided parameters.
   ///
@@ -35,7 +35,7 @@ class LintCodeDtoMapper {
   }
 
   /// Convert a list of [LintCodeDto] to a list of [Rule]
-  static List<Rule> toRules(Iterable<LintCodeDto> dtos) {
+  static List<Rule> convertDtosToRules(Iterable<LintCodeDto> dtos) {
     // Group DTOs by sharedName
     final groupedLintCodeDtosBySharedName = dtos
         .where((dto) => dto.sharedName != null)
@@ -54,7 +54,7 @@ class LintCodeDtoMapper {
           dtos.map((e) => e.deprecatedDetails).nonNulls.firstOrNull;
       final state = dtos.map((e) => e.state).nonNulls.firstOrNull;
 
-      return LintCodeDtoMapper.buildRule(
+      return RuleMapper.buildRule(
         name: e.key,
         categories: categories,
         details: deprecatedDetails,
@@ -66,7 +66,7 @@ class LintCodeDtoMapper {
     final rulesWithoutSharedName = dtos
         .where((dto) => dto.sharedName == null)
         .map(
-          (dto) => LintCodeDtoMapper.buildRule(
+          (dto) => RuleMapper.buildRule(
             name: dto.name,
             categories: dto.categories ?? const [],
             details: dto.deprecatedDetails,

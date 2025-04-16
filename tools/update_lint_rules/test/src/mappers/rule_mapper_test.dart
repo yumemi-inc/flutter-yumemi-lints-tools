@@ -1,11 +1,11 @@
 import 'package:pub_semver/pub_semver.dart';
 import 'package:test/test.dart';
-import 'package:update_lint_rules/src/mappers/lint_code_dto_mapper.dart';
+import 'package:update_lint_rules/src/mappers/rule_mapper.dart';
 import 'package:update_lint_rules/src/models/lint_code_dto.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 
 void main() {
-  group('LintCodeDtoMapper', () {
+  group('RuleMapper', () {
     group('toRule', () {
       test('converts valid dto to rule', () {
         final dto = LintCodeDto(
@@ -21,7 +21,7 @@ void main() {
           todo: 'test_todo',
         );
 
-        final rule = LintCodeDtoMapper.toRule(dto);
+        final rule = RuleMapper.toRule(dto);
 
         expect(rule.name, equals('test_name'));
         expect(rule.categories, equals(['style']));
@@ -46,10 +46,7 @@ void main() {
           todo: 'test_todo',
         );
 
-        expect(
-          () => LintCodeDtoMapper.toRule(dto),
-          throwsA(isA<FormatException>()),
-        );
+        expect(() => RuleMapper.toRule(dto), throwsA(isA<FormatException>()));
       });
 
       test('throws FormatException when details is null', () {
@@ -66,10 +63,7 @@ void main() {
           todo: 'test_todo',
         );
 
-        expect(
-          () => LintCodeDtoMapper.toRule(dto),
-          throwsA(isA<FormatException>()),
-        );
+        expect(() => RuleMapper.toRule(dto), throwsA(isA<FormatException>()));
       });
 
       test('throws FormatException when state is null', () {
@@ -86,10 +80,7 @@ void main() {
           todo: 'test_todo',
         );
 
-        expect(
-          () => LintCodeDtoMapper.toRule(dto),
-          throwsA(isA<FormatException>()),
-        );
+        expect(() => RuleMapper.toRule(dto), throwsA(isA<FormatException>()));
       });
 
       test('converts rule with multiple state entries', () {
@@ -106,7 +97,7 @@ void main() {
           todo: 'test_todo',
         );
 
-        final rule = LintCodeDtoMapper.toRule(dto);
+        final rule = RuleMapper.toRule(dto);
 
         expect(
           rule.state[RuleState.stable],
@@ -118,7 +109,7 @@ void main() {
         );
       });
     });
-    group('toRules', () {
+    group('convertDtosToRules', () {
       test('converts list of dtos to sorted list of rules', () {
         final dtos = [
           LintCodeDto(
@@ -147,7 +138,7 @@ void main() {
           ),
         ];
 
-        final rules = LintCodeDtoMapper.toRules(dtos);
+        final rules = RuleMapper.convertDtosToRules(dtos);
 
         expect(rules.length, equals(2));
         expect(rules[0].name, equals('a_name'));
@@ -182,7 +173,7 @@ void main() {
           ),
         ];
 
-        final rules = LintCodeDtoMapper.toRules(dtos);
+        final rules = RuleMapper.convertDtosToRules(dtos);
 
         expect(rules.length, equals(1));
 
@@ -224,14 +215,14 @@ void main() {
           ),
         ];
 
-        final rules = LintCodeDtoMapper.toRules(dtos);
+        final rules = RuleMapper.convertDtosToRules(dtos);
 
         expect(rules.length, equals(1));
         expect(rules[0].name, equals('valid_rule'));
       });
 
       test('handles empty dtos list', () {
-        final rules = LintCodeDtoMapper.toRules([]);
+        final rules = RuleMapper.convertDtosToRules([]);
 
         expect(rules, isEmpty);
       });
@@ -252,7 +243,7 @@ void main() {
           ),
         ];
 
-        final rules = LintCodeDtoMapper.toRules(dtos);
+        final rules = RuleMapper.convertDtosToRules(dtos);
 
         expect(rules.length, equals(1));
 
