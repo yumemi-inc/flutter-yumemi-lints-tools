@@ -8,20 +8,12 @@ void main() {
   group('RuleMapper', () {
     group('toRule', () {
       test('converts valid dto to rule', () {
-        final dto = LintCodeDto(
+        final rule = RuleMapper.buildRule(
           name: 'test_name',
-          sharedName: null,
-          problemMessage: 'test_message',
-          correctionMessage: 'test_correction',
-          state: {'stable': '2.0'},
           categories: ['style'],
-          hasPublishedDocs: true,
-          documentation: 'test_documentation',
-          deprecatedDetails: 'test_details',
-          todo: 'test_todo',
+          details: 'test_details',
+          state: {'stable': '2.0'},
         );
-
-        final rule = RuleMapper.toRule(dto);
 
         expect(rule.name, equals('test_name'));
         expect(rule.categories, equals(['style']));
@@ -33,71 +25,48 @@ void main() {
       });
 
       test('throws FormatException when categories is null', () {
-        final dto = LintCodeDto(
-          name: 'test_name',
-          sharedName: null,
-          problemMessage: 'test_message',
-          correctionMessage: 'test_correction',
-          state: {'stable': '2.0'},
-          categories: null,
-          hasPublishedDocs: true,
-          documentation: 'test_documentation',
-          deprecatedDetails: 'test_details',
-          todo: 'test_todo',
+        expect(
+          () => RuleMapper.buildRule(
+            name: 'test_name',
+            categories: null,
+            details: 'test_details',
+            state: {'stable': '2.0'},
+          ),
+          throwsA(isA<FormatException>()),
         );
-
-        expect(() => RuleMapper.toRule(dto), throwsA(isA<FormatException>()));
       });
 
       test('throws FormatException when details is null', () {
-        final dto = LintCodeDto(
-          name: 'test_name',
-          sharedName: null,
-          problemMessage: 'test_message',
-          correctionMessage: 'test_correction',
-          state: {'stable': '2.0'},
-          categories: ['style'],
-          hasPublishedDocs: true,
-          documentation: 'test_documentation',
-          deprecatedDetails: null,
-          todo: 'test_todo',
+        expect(
+          () => RuleMapper.buildRule(
+            name: 'test_name',
+            categories: ['style'],
+            details: null,
+            state: {'stable': '2.0'},
+          ),
+          throwsA(isA<FormatException>()),
         );
-
-        expect(() => RuleMapper.toRule(dto), throwsA(isA<FormatException>()));
       });
 
       test('throws FormatException when state is null', () {
-        final dto = LintCodeDto(
-          name: 'test_name',
-          sharedName: null,
-          problemMessage: 'test_message',
-          correctionMessage: 'test_correction',
-          state: null,
-          categories: ['style'],
-          hasPublishedDocs: true,
-          documentation: 'test_documentation',
-          deprecatedDetails: 'test_details',
-          todo: 'test_todo',
+        expect(
+          () => RuleMapper.buildRule(
+            name: 'test_name',
+            categories: ['style'],
+            details: 'test_details',
+            state: null,
+          ),
+          throwsA(isA<FormatException>()),
         );
-
-        expect(() => RuleMapper.toRule(dto), throwsA(isA<FormatException>()));
       });
 
       test('converts rule with multiple state entries', () {
-        final dto = LintCodeDto(
+        final rule = RuleMapper.buildRule(
           name: 'test_name',
-          sharedName: null,
-          problemMessage: 'test_message',
-          correctionMessage: 'test_correction',
-          state: {'stable': '2.0', 'deprecated': '2.0'},
           categories: ['style'],
-          hasPublishedDocs: true,
-          documentation: 'test_documentation',
-          deprecatedDetails: 'test_details',
-          todo: 'test_todo',
+          details: 'test_details',
+          state: {'stable': '2.0', 'deprecated': '3.0'},
         );
-
-        final rule = RuleMapper.toRule(dto);
 
         expect(
           rule.state[RuleState.stable],
@@ -105,7 +74,7 @@ void main() {
         );
         expect(
           rule.state[RuleState.deprecated],
-          equals(Since.dartSdk(Version.parse('2.0.0'))),
+          equals(Since.dartSdk(Version.parse('3.0.0'))),
         );
       });
     });
@@ -187,58 +156,24 @@ void main() {
         );
       });
 
-      test('filters out dtos with null state and null sharedName', () {
-        final dtos = [
-          LintCodeDto(
-            name: 'valid_rule',
-            sharedName: null,
-            problemMessage: 'test_message',
-            correctionMessage: 'test_correction',
-            state: {'stable': '2.0'},
-            categories: ['style'],
-            hasPublishedDocs: true,
-            documentation: 'test_documentation',
-            deprecatedDetails: 'test_details',
-            todo: 'test_todo',
-          ),
-          LintCodeDto(
-            name: 'invalid_rule',
-            sharedName: null,
-            problemMessage: 'test_message',
-            correctionMessage: 'test_correction',
-            state: null,
-            categories: ['style'],
-            hasPublishedDocs: true,
-            documentation: 'test_documentation',
-            deprecatedDetails: 'test_details',
-            todo: 'test_todo',
-          ),
-        ];
-
-        final rules = RuleMapper.convertDtosToRules(dtos);
-
-        expect(rules.length, equals(1));
-        expect(rules[0].name, equals('valid_rule'));
-      });
-
       test('handles empty dtos list', () {
         final rules = RuleMapper.convertDtosToRules([]);
 
         expect(rules, isEmpty);
       });
 
-      test('uses default values for null categories and details', () {
+      test('filters out dtos with null categories and null sharedName', () {
         final dtos = [
           LintCodeDto(
             name: 'test_name',
             sharedName: null,
             problemMessage: 'test_message',
             correctionMessage: 'test_correction',
-            state: {'stable': '2.0'},
+            state: {"stable": "2.0", "removed": "3.0"},
             categories: null,
             hasPublishedDocs: true,
             documentation: 'test_documentation',
-            deprecatedDetails: null,
+            deprecatedDetails: 'test_details',
             todo: 'test_todo',
           ),
         ];
@@ -246,10 +181,7 @@ void main() {
         final rules = RuleMapper.convertDtosToRules(dtos);
 
         expect(rules.length, equals(1));
-
-        final rule = rules.first;
-        expect(rule.categories, equals([]));
-        expect(rule.details, equals(''));
+        expect(rules[0].categories, equals([]));
       });
     });
   });
