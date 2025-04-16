@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
-import 'package:update_lint_rules/src/mappers/lint_code_dto_mapper.dart';
+import 'package:update_lint_rules/src/mappers/rule_mapper.dart';
 import 'package:update_lint_rules/src/models/lint_code_dto.dart';
 import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
@@ -145,7 +145,7 @@ class LintRuleService {
       return LintCodeDto.fromJson(rule);
     });
 
-    return LintCodeDtoMapper.toRules(codeDtos);
+    return RuleMapper.convertDtosToRules(codeDtos);
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
