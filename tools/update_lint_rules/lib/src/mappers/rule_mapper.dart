@@ -13,9 +13,9 @@ class RuleMapper {
   @visibleForTesting
   static Rule buildRule({
     required String name,
-    List<String>? categories,
-    String? details,
-    Map<String, dynamic>? state,
+    required List<String>? categories,
+    required String? details,
+    required Map<String, dynamic>? state,
   }) {
     if (categories == null || details == null || state == null) {
       throw FormatException(
