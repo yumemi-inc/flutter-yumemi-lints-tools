@@ -68,6 +68,10 @@ class RuleMapper {
         .map(
           (dto) => RuleMapper.buildRule(
             name: dto.name,
+            // NOTE:
+            //  https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/messages.yaml#L222-L250
+            //  Since data such as [always_require_non_null_named_parameters's for which category is null already exists,
+            //  an empty character is assigned when category is null.
             categories: dto.categories ?? const [],
             details: dto.deprecatedDetails,
             state: dto.state,
