@@ -2,6 +2,12 @@
 
 Follow the [Keep a Changelog] format.
 
+## 4.0.0 - 2025-04-17
+
+### Changed
+
+- Migrated source of [rules.jso](https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/tool/machine/rules.json) to [message.yaml](https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/messages.yaml).
+
 ## 3.1.0 - 2025-01-27
 
 ### Added
