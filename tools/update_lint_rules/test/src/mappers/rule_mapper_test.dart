@@ -6,8 +6,8 @@ import 'package:update_lint_rules/src/models/lint_rule.dart';
 
 void main() {
   group('RuleMapper', () {
-    group('toRule', () {
-      test('converts valid dto to rule', () {
+    group('buildRule', () {
+      test('builds Rule when parameters are provided', () {
         final rule = RuleMapper.buildRule(
           name: 'test_name',
           categories: ['style'],
@@ -60,7 +60,7 @@ void main() {
         );
       });
 
-      test('converts rule with multiple state entries', () {
+      test('builds Rule when state has multiple entries', () {
         final rule = RuleMapper.buildRule(
           name: 'test_name',
           categories: ['style'],
@@ -79,7 +79,7 @@ void main() {
       });
     });
     group('convertDtosToRules', () {
-      test('converts list of dtos to sorted list of rules', () {
+      test('converts DTOs to sorted Rules', () {
         final dtos = [
           LintCodeDto(
             name: 'b_name',
@@ -114,7 +114,7 @@ void main() {
         expect(rules[1].name, equals('b_name'));
       });
 
-      test('groups dtos with same sharedName', () {
+      test('converts DTOs with same sharedName into single Rule', () {
         final dtos = [
           LintCodeDto(
             name: 'shared_rule',
@@ -156,7 +156,7 @@ void main() {
         );
       });
 
-      test('handles empty dtos list', () {
+      test('converts empty DTOs to empty Rules', () {
         final rules = RuleMapper.convertDtosToRules([]);
 
         expect(rules, isEmpty);
