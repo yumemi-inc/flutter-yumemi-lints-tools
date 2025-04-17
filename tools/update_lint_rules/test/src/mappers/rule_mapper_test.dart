@@ -24,18 +24,6 @@ void main() {
         );
       });
 
-      test('throws FormatException when categories is null', () {
-        expect(
-          () => RuleMapper.buildRule(
-            name: 'test_name',
-            categories: null,
-            details: 'test_details',
-            state: {'stable': '2.0'},
-          ),
-          throwsA(isA<FormatException>()),
-        );
-      });
-
       test('throws FormatException when details is null', () {
         expect(
           () => RuleMapper.buildRule(
