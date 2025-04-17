@@ -79,7 +79,7 @@ class RuleMapper {
         );
 
     final allRules = [...rulesWithSharedName, ...rulesWithoutSharedName];
-    // Filter out inactive rules and sort by name
+    // Sort by name
     return allRules.sorted((a, b) => a.name.compareTo(b.name));
   }
 }
