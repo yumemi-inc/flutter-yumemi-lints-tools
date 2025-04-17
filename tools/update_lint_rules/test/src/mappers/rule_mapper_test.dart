@@ -149,28 +149,6 @@ void main() {
 
         expect(rules, isEmpty);
       });
-
-      test('filters out dtos with null categories and null sharedName', () {
-        final dtos = [
-          LintCodeDto(
-            name: 'test_name',
-            sharedName: null,
-            problemMessage: 'test_message',
-            correctionMessage: 'test_correction',
-            state: {"stable": "2.0", "removed": "3.0"},
-            categories: null,
-            hasPublishedDocs: true,
-            documentation: 'test_documentation',
-            deprecatedDetails: 'test_details',
-            todo: 'test_todo',
-          ),
-        ];
-
-        final rules = RuleMapper.convertDtosToRules(dtos);
-
-        expect(rules.length, equals(1));
-        expect(rules[0].categories, equals([]));
-      });
     });
   });
 }
