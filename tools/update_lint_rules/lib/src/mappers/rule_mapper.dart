@@ -8,8 +8,8 @@ class RuleMapper {
 
   /// Builds a [Rule] instance from provided parameters.
   ///
-  /// If any of the required parameters categories, details, or state
-  /// is null. The [FormatException] message includes which fields are missing.
+  /// If any of the required parameters (details or state)
+  /// is null, the [FormatException] message includes which fields are missing.
   @visibleForTesting
   static Rule buildRule({
     required String name,
@@ -17,15 +17,19 @@ class RuleMapper {
     required String? details,
     required Map<String, dynamic>? state,
   }) {
-    if (categories == null || details == null || state == null) {
+    if (details == null || state == null) {
       throw FormatException(
-        'The required field for the $name is null: ${[if (categories == null) 'categories', if (details == null) 'details', if (state == null) 'state'].join(', ')}',
+        'The required fields for the $name are null: ${[if (details == null) 'details', if (state == null) 'state'].join(', ')}',
       );
     }
 
     return Rule(
       name: name,
-      categories: categories,
+      // NOTE:
+      //  https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/messages.yaml#L222-L250
+      //  Since data such as always_require_non_null_named_parameters's for which category is null already exists,
+      //  an empty character is assigned when category is null.
+      categories: categories ?? const [],
       details: details,
       state: state.map(
         (key, value) =>
@@ -68,11 +72,7 @@ class RuleMapper {
         .map(
           (dto) => RuleMapper.buildRule(
             name: dto.name,
-            // NOTE:
-            //  https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/messages.yaml#L222-L250
-            //  Since data such as [always_require_non_null_named_parameters's for which category is null already exists,
-            //  an empty character is assigned when category is null.
-            categories: dto.categories ?? const [],
+            categories: dto.categories,
             details: dto.deprecatedDetails,
             state: dto.state,
           ),
