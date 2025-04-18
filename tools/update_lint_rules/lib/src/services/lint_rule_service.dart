@@ -176,6 +176,7 @@ const _isNotFlutterOnlyRules = [
   'always_put_control_body_on_new_line',
   'always_specify_types',
   'flutter_style_todos',
+  'unreachable_from_main',
 ];
 
 typedef _NotRecommendedRule = ({String name, String reason});
