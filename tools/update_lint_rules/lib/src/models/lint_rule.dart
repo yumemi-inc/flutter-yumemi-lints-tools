@@ -85,23 +85,23 @@ sealed class Since with _$Since {
 typedef State = Map<RuleState, Since>;
 
 extension ExtState on State {
-  /// Check if the state has a supported version.
+  /// Check if the [State] has an active state with a supported version.
   bool hasSupportedVersion(Version version) {
-    // Check if the version is supported by this state
-    final supportedVersions = entries.where((e) {
+    // Check if the version is supported by any of the states
+    final supportedStates = entries.where((e) {
       final since = e.value;
       if (since is! SinceDartSdk) {
         return false;
       }
-      final sinceVersion = since.version;
 
-      final isActive = e.key.active && sinceVersion >= version;
-      final isInactive = e.key.inactive && sinceVersion <= version;
-
-      return isActive || isInactive;
+      return since.version <= version;
     });
 
-    return supportedVersions.isEmpty;
+    if (supportedStates.any((r) => r.key.inactive)) {
+      return false;
+    }
+
+    return supportedStates.any((r) => r.key.active);
   }
 }
 
