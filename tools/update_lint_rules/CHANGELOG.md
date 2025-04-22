@@ -8,7 +8,7 @@ Follow the [Keep a Changelog] format.
 
 - Migrated source of [rules.json] to [message.yaml].
   - Also removed from [yumemi-inc/flutter-yumemi-lints]  since the value of `incompatibles` does not exist in `message.yaml`.
-- [Status] in `Lint rules` has been reflected and status or maturity level has been activated.
+  - [Status] in `Lint rules` has been reflected and status or maturity level has been activated.
 
 ## 3.1.0 - 2025-01-27
 
