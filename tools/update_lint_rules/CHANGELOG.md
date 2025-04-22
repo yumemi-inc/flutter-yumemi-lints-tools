@@ -2,11 +2,13 @@
 
 Follow the [Keep a Changelog] format.
 
-## 4.0.0 - 2025-04-17
+## 4.0.0 - 2025-04-22
 
 ### Changed
 
-- Migrated source of [rules.jso](https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/tool/machine/rules.json) to [message.yaml](https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/messages.yaml).
+- Migrated source of [rules.json] to [message.yaml].
+  - Also removed from [yumemi-inc/flutter-yumemi-lints]  since the value of `incompatibles` does not exist in `message.yaml`.
+- [Status] in `Lint rules` has been reflected and status or maturity level has been activated.
 
 ## 3.1.0 - 2025-01-27
 
@@ -37,3 +39,11 @@ Follow the [Keep a Changelog] format.
 <!-- Links -->
 
 [Keep a Changelog]: https://keepachangelog.com
+
+[rules.json]: https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/tool/machine/rules.json
+
+[message.yaml]: https://github.com/dart-lang/sdk/blob/ae6da8b926f208bf87d2e11375be5c611c27ee1b/pkg/linter/messages.yaml
+
+[Status]: https://dart.dev/tools/linter-rules#status
+
+[yumemi-inc/flutter-yumemi-lints]: https://github.com/yumemi-inc/flutter-yumemi-lints
