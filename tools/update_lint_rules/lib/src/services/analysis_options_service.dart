@@ -32,28 +32,15 @@ class AnalysisOptionsService {
   }) async {
     final futures = releases.map((release) async {
       final dartSdkVersion = release.version;
-      final allLintRules = lintRules.where((lintRule) {
-        final since = lintRule.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
-      final filteredNotRecommendedRules = notRecommendedRules.where((r) {
-        final since = r.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
+      final allLintRules = lintRules.where(
+        (lintRule) => lintRule.rule.state.hasSupportedVersion(dartSdkVersion),
+      );
+
+      final filteredNotRecommendedRules = notRecommendedRules.where(
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
+      );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) {
-          final since = r.rule.since;
-          if (since is! SinceDartSdk) {
-            return false;
-          }
-          return since.version <= dartSdkVersion;
-        },
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
       );
 
       final dartOutputDir = _outputDir.childDirectory(
@@ -88,28 +75,14 @@ class AnalysisOptionsService {
     final futures = releases.map((release) async {
       final flutterSdkVersion = release.version;
       final dartSdkVersion = release.dartSdkVersion;
-      final allLintRules = lintRules.where((lintRule) {
-        final since = lintRule.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
-      final filteredNotRecommendedRules = notRecommendedRules.where((r) {
-        final since = r.rule.since;
-        if (since is! SinceDartSdk) {
-          return false;
-        }
-        return since.version <= dartSdkVersion;
-      });
+      final allLintRules = lintRules.where(
+        (lintRule) => lintRule.rule.state.hasSupportedVersion(dartSdkVersion),
+      );
+      final filteredNotRecommendedRules = notRecommendedRules.where(
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
+      );
       final filteredRecommendedRuleSeverities = recommendedRuleSeverities.where(
-        (r) {
-          final since = r.rule.since;
-          if (since is! SinceDartSdk) {
-            return false;
-          }
-          return since.version <= dartSdkVersion;
-        },
+        (r) => r.rule.state.hasSupportedVersion(dartSdkVersion),
       );
 
       final flutterOutputDir = _outputDir.childDirectory(
@@ -163,10 +136,21 @@ linter:
     String ruleText(Rule rule) {
       const indent = '    ';
       final buffer = StringBuffer('$indent- ${rule.name}');
-      if (rule.incompatibles case final incompatibles
-          when incompatibles.isNotEmpty) {
-        buffer.write(' # incompatibles: ${incompatibles.join(',')}');
-      }
+
+      ///  TODO:
+      ///
+      /// SHA-1: 6322a400f1b0e70cba725d857d0936b5d5e2ea99
+      ///
+      /// Comment out the property that corresponds to INCOMPATIBLE
+      /// because it does not exist in the above SHA-1.
+      ///
+      /// Deletion or not will be determined at a later date.
+
+      // if (rule.incompatibles case final incompatibles
+      //     when incompatibles.isNotEmpty) {
+      //   buffer.write(' # incompatibles: ${incompatibles.join(',')}');
+      // }
+
       if (rule.categories case final categories when categories.isNotEmpty) {
         buffer.write(' # categories: ${categories.join(',')}');
       }

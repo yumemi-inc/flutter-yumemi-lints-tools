@@ -236,7 +236,7 @@ $RuleCopyWith<$Res> get rule {
 /// @nodoc
 mixin _$Rule {
 
- String get name; String get description; List<String> get categories; RuleState get state;@JsonKey(name: 'incompatible') List<String> get incompatibles; List<RuleSet> get sets; FixStatus get fixStatus; String get details;@JsonKey(name: 'sinceDartSdk') Since get since;
+ String get name; List<String> get categories;@JsonKey(name: 'deprecatedDetails') String get details;@_StateJsonConverter() Map<RuleState, Since> get state;
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -249,16 +249,16 @@ $RuleCopyWith<Rule> get copyWith => _$RuleCopyWithImpl<Rule>(this as Rule, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Rule&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.state, state) || other.state == state)&&const DeepCollectionEquality().equals(other.incompatibles, incompatibles)&&const DeepCollectionEquality().equals(other.sets, sets)&&(identical(other.fixStatus, fixStatus) || other.fixStatus == fixStatus)&&(identical(other.details, details) || other.details == details)&&(identical(other.since, since) || other.since == since));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Rule&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.details, details) || other.details == details)&&const DeepCollectionEquality().equals(other.state, state));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(categories),state,const DeepCollectionEquality().hash(incompatibles),const DeepCollectionEquality().hash(sets),fixStatus,details,since);
+int get hashCode => Object.hash(runtimeType,name,const DeepCollectionEquality().hash(categories),details,const DeepCollectionEquality().hash(state));
 
 @override
 String toString() {
-  return 'Rule(name: $name, description: $description, categories: $categories, state: $state, incompatibles: $incompatibles, sets: $sets, fixStatus: $fixStatus, details: $details, since: $since)';
+  return 'Rule(name: $name, categories: $categories, details: $details, state: $state)';
 }
 
 
@@ -269,11 +269,11 @@ abstract mixin class $RuleCopyWith<$Res>  {
   factory $RuleCopyWith(Rule value, $Res Function(Rule) _then) = _$RuleCopyWithImpl;
 @useResult
 $Res call({
- String name, String description, List<String> categories, RuleState state,@JsonKey(name: 'incompatible') List<String> incompatibles, List<RuleSet> sets, FixStatus fixStatus, String details,@JsonKey(name: 'sinceDartSdk') Since since
+ String name, List<String> categories,@JsonKey(name: 'deprecatedDetails') String details,@_StateJsonConverter() Map<RuleState, Since> state
 });
 
 
-$SinceCopyWith<$Res> get since;
+
 
 }
 /// @nodoc
@@ -286,30 +286,16 @@ class _$RuleCopyWithImpl<$Res>
 
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? categories = null,Object? state = null,Object? incompatibles = null,Object? sets = null,Object? fixStatus = null,Object? details = null,Object? since = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? categories = null,Object? details = null,Object? state = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
-as List<String>,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
-as RuleState,incompatibles: null == incompatibles ? _self.incompatibles : incompatibles // ignore: cast_nullable_to_non_nullable
-as List<String>,sets: null == sets ? _self.sets : sets // ignore: cast_nullable_to_non_nullable
-as List<RuleSet>,fixStatus: null == fixStatus ? _self.fixStatus : fixStatus // ignore: cast_nullable_to_non_nullable
-as FixStatus,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
-as String,since: null == since ? _self.since : since // ignore: cast_nullable_to_non_nullable
-as Since,
+as List<String>,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as Map<RuleState, Since>,
   ));
 }
-/// Create a copy of Rule
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$SinceCopyWith<$Res> get since {
-  
-  return $SinceCopyWith<$Res>(_self.since, (value) {
-    return _then(_self.copyWith(since: value));
-  });
-}
+
 }
 
 
@@ -317,11 +303,10 @@ $SinceCopyWith<$Res> get since {
 @JsonSerializable()
 
 class _Rule extends Rule {
-  const _Rule({required this.name, required this.description, required final  List<String> categories, required this.state, @JsonKey(name: 'incompatible') required final  List<String> incompatibles, required final  List<RuleSet> sets, required this.fixStatus, required this.details, @JsonKey(name: 'sinceDartSdk') required this.since}): _categories = categories,_incompatibles = incompatibles,_sets = sets,super._();
+  const _Rule({required this.name, required final  List<String> categories, @JsonKey(name: 'deprecatedDetails') required this.details, @_StateJsonConverter() required final  Map<RuleState, Since> state}): _categories = categories,_state = state,super._();
   factory _Rule.fromJson(Map<String, dynamic> json) => _$RuleFromJson(json);
 
 @override final  String name;
-@override final  String description;
  final  List<String> _categories;
 @override List<String> get categories {
   if (_categories is EqualUnmodifiableListView) return _categories;
@@ -329,24 +314,14 @@ class _Rule extends Rule {
   return EqualUnmodifiableListView(_categories);
 }
 
-@override final  RuleState state;
- final  List<String> _incompatibles;
-@override@JsonKey(name: 'incompatible') List<String> get incompatibles {
-  if (_incompatibles is EqualUnmodifiableListView) return _incompatibles;
+@override@JsonKey(name: 'deprecatedDetails') final  String details;
+ final  Map<RuleState, Since> _state;
+@override@_StateJsonConverter() Map<RuleState, Since> get state {
+  if (_state is EqualUnmodifiableMapView) return _state;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_incompatibles);
+  return EqualUnmodifiableMapView(_state);
 }
 
- final  List<RuleSet> _sets;
-@override List<RuleSet> get sets {
-  if (_sets is EqualUnmodifiableListView) return _sets;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_sets);
-}
-
-@override final  FixStatus fixStatus;
-@override final  String details;
-@override@JsonKey(name: 'sinceDartSdk') final  Since since;
 
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
@@ -361,16 +336,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Rule&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.state, state) || other.state == state)&&const DeepCollectionEquality().equals(other._incompatibles, _incompatibles)&&const DeepCollectionEquality().equals(other._sets, _sets)&&(identical(other.fixStatus, fixStatus) || other.fixStatus == fixStatus)&&(identical(other.details, details) || other.details == details)&&(identical(other.since, since) || other.since == since));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Rule&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.details, details) || other.details == details)&&const DeepCollectionEquality().equals(other._state, _state));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(_categories),state,const DeepCollectionEquality().hash(_incompatibles),const DeepCollectionEquality().hash(_sets),fixStatus,details,since);
+int get hashCode => Object.hash(runtimeType,name,const DeepCollectionEquality().hash(_categories),details,const DeepCollectionEquality().hash(_state));
 
 @override
 String toString() {
-  return 'Rule(name: $name, description: $description, categories: $categories, state: $state, incompatibles: $incompatibles, sets: $sets, fixStatus: $fixStatus, details: $details, since: $since)';
+  return 'Rule(name: $name, categories: $categories, details: $details, state: $state)';
 }
 
 
@@ -381,11 +356,11 @@ abstract mixin class _$RuleCopyWith<$Res> implements $RuleCopyWith<$Res> {
   factory _$RuleCopyWith(_Rule value, $Res Function(_Rule) _then) = __$RuleCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String description, List<String> categories, RuleState state,@JsonKey(name: 'incompatible') List<String> incompatibles, List<RuleSet> sets, FixStatus fixStatus, String details,@JsonKey(name: 'sinceDartSdk') Since since
+ String name, List<String> categories,@JsonKey(name: 'deprecatedDetails') String details,@_StateJsonConverter() Map<RuleState, Since> state
 });
 
 
-@override $SinceCopyWith<$Res> get since;
+
 
 }
 /// @nodoc
@@ -398,31 +373,17 @@ class __$RuleCopyWithImpl<$Res>
 
 /// Create a copy of Rule
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? categories = null,Object? state = null,Object? incompatibles = null,Object? sets = null,Object? fixStatus = null,Object? details = null,Object? since = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? categories = null,Object? details = null,Object? state = null,}) {
   return _then(_Rule(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<String>,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
-as RuleState,incompatibles: null == incompatibles ? _self._incompatibles : incompatibles // ignore: cast_nullable_to_non_nullable
-as List<String>,sets: null == sets ? _self._sets : sets // ignore: cast_nullable_to_non_nullable
-as List<RuleSet>,fixStatus: null == fixStatus ? _self.fixStatus : fixStatus // ignore: cast_nullable_to_non_nullable
-as FixStatus,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
-as String,since: null == since ? _self.since : since // ignore: cast_nullable_to_non_nullable
-as Since,
+as List<String>,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self._state : state // ignore: cast_nullable_to_non_nullable
+as Map<RuleState, Since>,
   ));
 }
 
-/// Create a copy of Rule
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$SinceCopyWith<$Res> get since {
-  
-  return $SinceCopyWith<$Res>(_self.since, (value) {
-    return _then(_self.copyWith(since: value));
-  });
-}
+
 }
 
 /// @nodoc

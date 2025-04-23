@@ -1,11 +1,13 @@
-import 'dart:convert';
-
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
+import 'package:update_lint_rules/src/mappers/rule_mapper.dart';
+import 'package:update_lint_rules/src/models/lint_code_dto.dart';
+import 'package:yaml/yaml.dart';
 import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 import 'package:update_lint_rules/src/models/not_recommended_rule.dart';
@@ -114,28 +116,36 @@ class LintRuleService {
     );
   }
 
-  final _allRulesMemo = AsyncMemoizer<Iterable<Rule>>();
+  final _allRulesMemo = AsyncMemoizer<List<Rule>>();
 
   @visibleForTesting
-  Future<Iterable<Rule>> getRules() => _allRulesMemo.runOnce(() async {
+  Future<List<Rule>> getRules() => _allRulesMemo.runOnce(() async {
     final url = Uri.https(
       'raw.githubusercontent.com',
-      'dart-lang/sdk/main/pkg/linter/tool/machine/rules.json',
+      'dart-lang/sdk/main/pkg/linter/messages.yaml',
     );
 
     final responseBody = await _appClient.read(url);
 
-    final json = jsonDecode(responseBody) as List<dynamic>;
+    final yaml = loadYaml(responseBody);
 
-    final rules = json
-        .map((e) => Rule.fromJson(e))
-        .where(
-          (e) => switch (e.state) {
-            RuleState.stable || RuleState.experimental => true,
-            RuleState.deprecated || RuleState.removed => false,
-          },
-        );
-    return rules;
+    final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
+
+    // Convert to DTOs
+    final codeDtos = lintCode.entries.map((e) {
+      final entryValue = e.value;
+      if (entryValue is! YamlMap) {
+        throw FormatException('entryValue is not YamlMap: $entryValue');
+      }
+
+      final rule = {
+        'name': entryValue['sharedName'] ?? e.key,
+        ...entryValue.toJson(),
+      };
+      return LintCodeDto.fromJson(rule);
+    });
+
+    return RuleMapper.convertDtosToRules(codeDtos);
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
@@ -166,6 +176,7 @@ const _isNotFlutterOnlyRules = [
   'always_put_control_body_on_new_line',
   'always_specify_types',
   'flutter_style_todos',
+  'unreachable_from_main',
 ];
 
 typedef _NotRecommendedRule = ({String name, String reason});
