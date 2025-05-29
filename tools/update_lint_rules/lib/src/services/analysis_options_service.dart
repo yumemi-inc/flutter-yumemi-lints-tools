@@ -170,26 +170,13 @@ linter:
     required String includeContent,
   }) async {
     final contentBuffer = StringBuffer();
-    contentBuffer.writeln('# GENERATED CODE - DO NOT MODIFY BY HAND');
+    contentBuffer.writeln(_headerContent);
     contentBuffer.writeln();
 
     contentBuffer.writeln(includeContent);
     contentBuffer.writeln();
 
-    contentBuffer.writeln('''
-analyzer:
-  language:
-    # Increase safety as much as possible.
-    strict-casts: true
-    strict-inference: true
-    strict-raw-types: true
-  errors:
-    # By including all.yaml, some rules will conflict. These warnings will be addressed within this file.
-    included_file_warning: ignore
-
-    # Members annotated with `visibleForTesting` should not be referenced outside of the library in which they are declared or libraries within the test directory.
-    invalid_use_of_visible_for_testing_member: error
-''');
+    contentBuffer.writeln(_analyzerContent);
 
     const indent = '    ';
     final recommendedRuleSeveritiesTexts = recommendedRuleSeverities
@@ -219,3 +206,20 @@ linter:
     outputFile.writeAsStringSync(contentBuffer.toString());
   }
 }
+
+const _headerContent = '# GENERATED CODE - DO NOT MODIFY BY HAND';
+
+const _analyzerContent = '''
+analyzer:
+  language:
+    # Increase safety as much as possible.
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # By including all.yaml, some rules will conflict. These warnings will be addressed within this file.
+    included_file_warning: ignore
+
+    # Members annotated with `visibleForTesting` should not be referenced outside of the library in which they are declared or libraries within the test directory.
+    invalid_use_of_visible_for_testing_member: error
+''';
