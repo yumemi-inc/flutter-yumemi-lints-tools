@@ -1,5 +1,6 @@
 import 'package:file/file.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:update_lint_rules/src/extension/version_ext.dart';
@@ -55,11 +56,14 @@ class AnalysisOptionsService {
         ..createSync(recursive: true);
       final recommendedIncludeContent =
           'include: package:yumemi_lints/dart/${dartSdkVersion.excludePatchVersion}/all.yaml';
+      final formatterContent =
+          dartSdkVersion < Version(3, 8, 0) ? null : _formatterContent;
       return outputRecommendedLintRules(
         outputFile: recommendedFile,
         notRecommendedRules: filteredNotRecommendedRules,
         recommendedRuleSeverities: filteredRecommendedRuleSeverities,
         includeContent: recommendedIncludeContent,
+        formatterContent: formatterContent,
       );
     });
 
@@ -103,11 +107,14 @@ class AnalysisOptionsService {
         ..createSync(recursive: true);
       final recommendedIncludeContent =
           'include: package:yumemi_lints/flutter/${flutterSdkVersion.excludePatchVersion}/all.yaml';
+      final formatterContent =
+          dartSdkVersion < Version(3, 8, 0) ? null : _formatterContent;
       return outputRecommendedLintRules(
         outputFile: recommendedFile,
         notRecommendedRules: filteredNotRecommendedRules,
         recommendedRuleSeverities: filteredRecommendedRuleSeverities,
         includeContent: recommendedIncludeContent,
+        formatterContent: formatterContent,
       );
     });
 
@@ -168,28 +175,16 @@ linter:
     required Iterable<NotRecommendedRule> notRecommendedRules,
     required Iterable<RecommendedRuleSeverity> recommendedRuleSeverities,
     required String includeContent,
+    required String? formatterContent,
   }) async {
     final contentBuffer = StringBuffer();
-    contentBuffer.writeln('# GENERATED CODE - DO NOT MODIFY BY HAND');
+    contentBuffer.writeln(_headerContent);
     contentBuffer.writeln();
 
     contentBuffer.writeln(includeContent);
     contentBuffer.writeln();
 
-    contentBuffer.writeln('''
-analyzer:
-  language:
-    # Increase safety as much as possible.
-    strict-casts: true
-    strict-inference: true
-    strict-raw-types: true
-  errors:
-    # By including all.yaml, some rules will conflict. These warnings will be addressed within this file.
-    included_file_warning: ignore
-
-    # Members annotated with `visibleForTesting` should not be referenced outside of the library in which they are declared or libraries within the test directory.
-    invalid_use_of_visible_for_testing_member: error
-''');
+    contentBuffer.writeln(_analyzerContent);
 
     const indent = '    ';
     final recommendedRuleSeveritiesTexts = recommendedRuleSeverities
@@ -202,6 +197,10 @@ analyzer:
         .join('\n\n');
     contentBuffer.writeln(recommendedRuleSeveritiesTexts);
     contentBuffer.writeln();
+
+    if (formatterContent != null) {
+      contentBuffer.writeln(formatterContent);
+    }
 
     contentBuffer.writeln('''
 linter:
@@ -219,3 +218,25 @@ linter:
     outputFile.writeAsStringSync(contentBuffer.toString());
   }
 }
+
+const _headerContent = '# GENERATED CODE - DO NOT MODIFY BY HAND';
+
+const _analyzerContent = '''
+analyzer:
+  language:
+    # Increase safety as much as possible.
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # By including all.yaml, some rules will conflict. These warnings will be addressed within this file.
+    included_file_warning: ignore
+
+    # Members annotated with `visibleForTesting` should not be referenced outside of the library in which they are declared or libraries within the test directory.
+    invalid_use_of_visible_for_testing_member: error
+''';
+
+const _formatterContent = '''
+formatter:
+  trailing_commas: preserve
+''';

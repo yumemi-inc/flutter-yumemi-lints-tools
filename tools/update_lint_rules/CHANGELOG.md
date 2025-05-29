@@ -2,6 +2,12 @@
 
 Follow the [Keep a Changelog] format.
 
+## 4.1.0 - 2025-05-29
+
+### Added
+
+- Output `formatter` section in `analysis_options.yaml` for Dart 3.8.0 or later. ( `trailing_commas: preserve` )
+
 ## 4.0.0 - 2025-04-22
 
 ### Changed

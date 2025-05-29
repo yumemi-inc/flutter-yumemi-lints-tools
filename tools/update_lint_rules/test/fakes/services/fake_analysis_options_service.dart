@@ -36,5 +36,6 @@ class FakeAnalysisOptionsService implements AnalysisOptionsService {
     required Iterable<NotRecommendedRule> notRecommendedRules,
     required Iterable<RecommendedRuleSeverity> recommendedRuleSeverities,
     required String includeContent,
+    required String? formatterContent,
   }) async {}
 }
