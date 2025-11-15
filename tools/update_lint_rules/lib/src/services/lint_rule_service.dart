@@ -4,15 +4,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/extension/yaml_map_ext.dart';
 import 'package:update_lint_rules/src/mappers/rule_mapper.dart';
 import 'package:update_lint_rules/src/models/lint_code_dto.dart';
-import 'package:yaml/yaml.dart';
-import 'package:update_lint_rules/src/clients/app_client.dart';
 import 'package:update_lint_rules/src/models/lint_rule.dart';
 import 'package:update_lint_rules/src/models/not_recommended_rule.dart';
 import 'package:update_lint_rules/src/models/recommended_rule_severity.dart';
 import 'package:update_lint_rules/src/models/severity_level.dart';
+import 'package:yaml/yaml.dart';
 
 part 'lint_rule_service.g.dart';
 
@@ -129,7 +129,7 @@ class LintRuleService {
 
     final yaml = loadYaml(responseBody);
 
-    final lintCode = Map<String, dynamic>.from(yaml['LintCode']);
+    final lintCode = Map<String, dynamic>.from(yaml['LinterLintCode']);
 
     // Convert to DTOs
     final codeDtos = lintCode.entries.map((e) {
