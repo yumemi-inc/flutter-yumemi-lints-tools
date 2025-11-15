@@ -109,6 +109,8 @@ class SdkService {
         .nonNulls
         // Filter out non-stable releases
         .where((release) => release.channel == FlutterChannel.stable)
+        // This package supports only Flutter 3.0.0 and later.
+        .where((release) => release.version >= Version(3, 0, 0))
         .groupListsBy(
           (release) => (release.version.major, release.version.minor),
         )
