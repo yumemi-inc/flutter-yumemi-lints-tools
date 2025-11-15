@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod/riverpod.dart';
@@ -106,16 +107,14 @@ class SdkService {
           }
         })
         .nonNulls
-        .where((release) {
-          if (release.channel != FlutterChannel.stable) {
-            return false;
-          }
-
-          // The yumemi_lints package supports Flutter 3.0.0 and later.
-          // Do not create lint rule when patch version is changed.
-          return release.version >= Version(3, 0, 0) &&
-              release.version.patch == 0;
-        });
+        // Filter out non-stable releases
+        .where((release) => release.channel == FlutterChannel.stable)
+        .groupListsBy(
+          (release) => (release.version.major, release.version.minor),
+        )
+        .entries
+        .map((entry) => entry.value.last)
+        .toSet();
   }
 }
 
