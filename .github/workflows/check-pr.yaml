@@ -53,7 +53,7 @@ jobs:
 
       - name: Report test
         if: steps.check_files.outputs.files_exists == 'true'
-        uses: dorny/test-reporter@dc3a92680fcc15842eef52e8c4606ea7ce6bd3f3 # v2.1.1
+        uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2.3.0
         with:
           name: "dart test"
           # https://github.com/mrmlnc/fast-glob の形式
