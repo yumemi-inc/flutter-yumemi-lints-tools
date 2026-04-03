@@ -145,7 +145,11 @@ class LintRuleService {
       return LintCodeDto.fromJson(rule);
     });
 
-    return RuleMapper.convertDtosToRules(codeDtos);
+    final rules = RuleMapper.convertDtosToRules(codeDtos);
+
+    // Convert camelCase rule names from the SDK to snake_case,
+    // which is the canonical format used in analysis_options.yaml.
+    return rules.map((rule) => rule.copyWith(name: _toSnakeCase(rule.name))).toList();
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
@@ -324,3 +328,37 @@ const _yumemiRecommendedRuleSeverities = <_RecommendedRuleSeverity>[
     severityLevel: SeverityLevel.error,
   ),
 ];
+
+/// Converts a camelCase rule name from the SDK's `messages.yaml` to the
+/// canonical snake_case format used in `analysis_options.yaml`.
+///
+/// Most names are converted with a simple regex, but some rule names lose
+/// casing information in the SDK's camelCase representation (e.g.,
+/// `noRuntimetypeTostring` was originally `no_runtimeType_toString`).
+/// These are handled via an explicit override table.
+String _toSnakeCase(String input) {
+  if (_snakeCaseOverrides.containsKey(input)) {
+    return _snakeCaseOverrides[input]!;
+  }
+
+  // Insert '_' before each uppercase letter and before digits that follow
+  // a lowercase letter (e.g., 'Than80' -> 'than_80').
+  return input
+      .replaceAllMapped(
+        RegExp(r'(?<=[a-z])([A-Z])'),
+        (match) => '_${match.group(1)!.toLowerCase()}',
+      )
+      .replaceAllMapped(
+        RegExp(r'(?<=[a-z])(\d)'),
+        (match) => '_${match.group(1)!}',
+      );
+}
+
+/// Rule names where the SDK's camelCase form loses casing information
+/// that is present in the canonical snake_case form.
+const _snakeCaseOverrides = <String, String>{
+  'linesLongerThan80Chars': 'lines_longer_than_80_chars',
+  'noRuntimetypeTostring': 'no_runtimeType_toString',
+  'preferForElementsToMapFromiterable': 'prefer_for_elements_to_map_fromIterable',
+  'preferIterableWheretype': 'prefer_iterable_whereType',
+};
