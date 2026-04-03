@@ -111,8 +111,8 @@ class LintRuleService {
     );
     return (
       dart: recommendedRuleSeverities.whereType<RecommendedRuleSeverityDart>(),
-      flutter:
-          recommendedRuleSeverities.whereType<RecommendedRuleSeverityFlutter>(),
+      flutter: recommendedRuleSeverities
+          .whereType<RecommendedRuleSeverityFlutter>(),
     );
   }
 
@@ -149,7 +149,9 @@ class LintRuleService {
 
     // Convert camelCase rule names from the SDK to snake_case,
     // which is the canonical format used in analysis_options.yaml.
-    return rules.map((rule) => rule.copyWith(name: _toSnakeCase(rule.name))).toList();
+    return rules
+        .map((rule) => rule.copyWith(name: _toSnakeCase(rule.name)))
+        .toList();
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
@@ -234,8 +236,11 @@ const _yumemiNotRecommendedRules = <_NotRecommendedRule>[
   ),
 ];
 
-typedef _RecommendedRuleSeverity =
-    ({String name, String reason, SeverityLevel severityLevel});
+typedef _RecommendedRuleSeverity = ({
+  String name,
+  String reason,
+  SeverityLevel severityLevel,
+});
 
 /// Severity levels of rule recommended by YUMEMI Inc.
 const _yumemiRecommendedRuleSeverities = <_RecommendedRuleSeverity>[
@@ -332,18 +337,15 @@ const _yumemiRecommendedRuleSeverities = <_RecommendedRuleSeverity>[
 /// Converts a camelCase rule name from the SDK's `messages.yaml` to the
 /// canonical snake_case format used in `analysis_options.yaml`.
 ///
-/// Most names are converted with a simple regex, but some rule names lose
-/// casing information in the SDK's camelCase representation (e.g.,
-/// `noRuntimetypeTostring` was originally `no_runtimeType_toString`).
-/// These are handled via an explicit override table.
+/// Three regex passes handle most cases:
+/// 1. lowercase→uppercase boundary (e.g. `linesLonger` → `lines_longer`)
+/// 2. lowercase→digit boundary (e.g. `than80` → `than_80`)
+/// 3. digit→uppercase boundary (e.g. `80Chars` → `80_chars`)
+///
+/// After conversion, [_segmentFixes] restores casing lost when the SDK
+/// lowercased type-name segments (e.g. `toString` → `tostring`).
 String _toSnakeCase(String input) {
-  if (_snakeCaseOverrides.containsKey(input)) {
-    return _snakeCaseOverrides[input]!;
-  }
-
-  // Insert '_' before each uppercase letter and before digits that follow
-  // a lowercase letter (e.g., 'Than80' -> 'than_80').
-  return input
+  final snake = input
       .replaceAllMapped(
         RegExp(r'(?<=[a-z])([A-Z])'),
         (match) => '_${match.group(1)!.toLowerCase()}',
@@ -351,14 +353,26 @@ String _toSnakeCase(String input) {
       .replaceAllMapped(
         RegExp(r'(?<=[a-z])(\d)'),
         (match) => '_${match.group(1)!}',
+      )
+      .replaceAllMapped(
+        RegExp(r'(?<=\d)([A-Z])'),
+        (match) => '_${match.group(1)!.toLowerCase()}',
       );
+  return snake
+      .split('_')
+      .map((segment) => _segmentFixes[segment] ?? segment)
+      .join('_');
 }
 
-/// Rule names where the SDK's camelCase form loses casing information
-/// that is present in the canonical snake_case form.
-const _snakeCaseOverrides = <String, String>{
-  'linesLongerThan80Chars': 'lines_longer_than_80_chars',
-  'noRuntimetypeTostring': 'no_runtimeType_toString',
-  'preferForElementsToMapFromiterable': 'prefer_for_elements_to_map_fromIterable',
-  'preferIterableWheretype': 'prefer_iterable_whereType',
+/// Restores casing information lost when the SDK lowercased type-name segments
+/// during camelCase conversion (e.g. `runtimeType` → `runtimetype`).
+///
+/// Keyed by the lowercased segment; value is the canonical mixed-case form.
+/// Applied segment-by-segment so future rules containing these segments are
+/// handled automatically without adding new entries.
+const _segmentFixes = <String, String>{
+  'runtimetype': 'runtimeType',
+  'tostring': 'toString',
+  'fromiterable': 'fromIterable',
+  'wheretype': 'whereType',
 };
