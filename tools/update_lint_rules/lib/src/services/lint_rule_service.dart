@@ -111,8 +111,8 @@ class LintRuleService {
     );
     return (
       dart: recommendedRuleSeverities.whereType<RecommendedRuleSeverityDart>(),
-      flutter: recommendedRuleSeverities
-          .whereType<RecommendedRuleSeverityFlutter>(),
+      flutter:
+          recommendedRuleSeverities.whereType<RecommendedRuleSeverityFlutter>(),
     );
   }
 
@@ -236,11 +236,8 @@ const _yumemiNotRecommendedRules = <_NotRecommendedRule>[
   ),
 ];
 
-typedef _RecommendedRuleSeverity = ({
-  String name,
-  String reason,
-  SeverityLevel severityLevel,
-});
+typedef _RecommendedRuleSeverity =
+    ({String name, String reason, SeverityLevel severityLevel});
 
 /// Severity levels of rule recommended by YUMEMI Inc.
 const _yumemiRecommendedRuleSeverities = <_RecommendedRuleSeverity>[
