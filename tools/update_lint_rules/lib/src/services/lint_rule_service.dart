@@ -145,7 +145,13 @@ class LintRuleService {
       return LintCodeDto.fromJson(rule);
     });
 
-    return RuleMapper.convertDtosToRules(codeDtos);
+    final rules = RuleMapper.convertDtosToRules(codeDtos);
+
+    // Convert camelCase rule names from the SDK to snake_case,
+    // which is the canonical format used in analysis_options.yaml.
+    return rules
+        .map((rule) => rule.copyWith(name: _toSnakeCase(rule.name)))
+        .toList();
   });
 
   Future<bool> isFlutterOnlyRule(Rule rule) async {
@@ -324,3 +330,46 @@ const _yumemiRecommendedRuleSeverities = <_RecommendedRuleSeverity>[
     severityLevel: SeverityLevel.error,
   ),
 ];
+
+/// Converts a camelCase rule name from the SDK's `messages.yaml` to the
+/// canonical snake_case format used in `analysis_options.yaml`.
+///
+/// Three regex passes handle most cases:
+/// 1. lowercase→uppercase boundary (e.g. `linesLonger` → `lines_longer`)
+/// 2. lowercase→digit boundary (e.g. `than80` → `than_80`)
+/// 3. digit→uppercase boundary (e.g. `80Chars` → `80_chars`)
+///
+/// After conversion, [_segmentFixes] restores casing lost when the SDK
+/// lowercased type-name segments (e.g. `toString` → `tostring`).
+String _toSnakeCase(String input) {
+  final snake = input
+      .replaceAllMapped(
+        RegExp(r'(?<=[a-z])([A-Z])'),
+        (match) => '_${match.group(1)!.toLowerCase()}',
+      )
+      .replaceAllMapped(
+        RegExp(r'(?<=[a-z])(\d)'),
+        (match) => '_${match.group(1)!}',
+      )
+      .replaceAllMapped(
+        RegExp(r'(?<=\d)([A-Z])'),
+        (match) => '_${match.group(1)!.toLowerCase()}',
+      );
+  return snake
+      .split('_')
+      .map((segment) => _segmentFixes[segment] ?? segment)
+      .join('_');
+}
+
+/// Restores casing information lost when the SDK lowercased type-name segments
+/// during camelCase conversion (e.g. `runtimeType` → `runtimetype`).
+///
+/// Keyed by the lowercased segment; value is the canonical mixed-case form.
+/// Applied segment-by-segment so future rules containing these segments are
+/// handled automatically without adding new entries.
+const _segmentFixes = <String, String>{
+  'runtimetype': 'runtimeType',
+  'tostring': 'toString',
+  'fromiterable': 'fromIterable',
+  'wheretype': 'whereType',
+};
